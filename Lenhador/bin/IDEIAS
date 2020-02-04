@@ -1,0 +1,24 @@
+ IDEAIS DO CURSO
+ 
+ -	Sprites do jogo
+ -	Pause, GameOver e Start Menu
+ -	Sistema de animação do player
+ -	Controle pelo teclado
+ -	Sistema de shooting
+ -	Sistema de mapas
+ -	Sistema de leveis
+ -	Inimigos
+ -	Boss Battle
+ -	Coletar items	
+ -	Aumentar atk/def pelo item
+ -	Sistema de dano
+ -	Save/Load 
+ -	Audio/Musica
+ 
+ ------------------------------------
+ 
+ MINHAS IDEIAS
+ 
+- Mudar Dificuldade ( IMPLEMENTADO )
+- Mutiplicar Pontos pela Dificuldade ( IMPLEMENTADO )
+- Bala colidir com as paredes
