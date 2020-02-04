@@ -62,14 +62,6 @@ public class Entity {
 
 	/************ Get/Set ************/
 
-	// Trocar o tamanho da mascara de colisão das entidades
-	public void setMask(int maskX, int maskY, int maskWidth, int maskHeight) {
-		this.maskX = maskX;
-		this.maskY = maskY;
-		this.maskWidth = maskWidth;
-		this.maskHeight = maskHeight;
-	}
-
 	public void setX(int newX) {
 		this.x = newX;
 
@@ -105,6 +97,38 @@ public class Entity {
 		return height;
 	}
 
+	public int getMaskX() {
+		return maskX;
+	}
+
+	public void setMaskX(int maskX) {
+		this.maskX = maskX;
+	}
+
+	public int getMaskY() {
+		return maskY;
+	}
+
+	public void setMaskY(int maskY) {
+		this.maskY = maskY;
+	}
+
+	public int getMaskWidth() {
+		return maskWidth;
+	}
+
+	public void setMaskWidth(int maskWidth) {
+		this.maskWidth = maskWidth;
+	}
+
+	public int getMaskHeight() {
+		return maskHeight;
+	}
+
+	public void setMaskHeight(int maskHeight) {
+		this.maskHeight = maskHeight;
+	}
+	
 	/************************************/
 
 	/************ Lógica ************/
@@ -115,8 +139,10 @@ public class Entity {
 
 	// Verifica colisão entre entidades
 	public static boolean isColliding(Entity e1, Entity e2) {
-		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskX, e1.getY() + e1.maskY, e1.maskWidth, e1.maskHeight);
-		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskX, e2.getY() + e2.maskY, e2.maskWidth, e2.maskHeight);
+		Rectangle e1Mask = new Rectangle(e1.getX() + e1.getMaskX(), e1.getY() + e1.getMaskY(), e1.getMaskWidth(),
+				e1.getMaskHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX() + e2.getMaskX(), e2.getY() + e2.getMaskY(), e2.getMaskWidth(),
+				e2.getMaskHeight());
 
 		if (e1Mask.intersects(e2Mask) && e1.z == e2.z) {
 			return true;
@@ -124,6 +150,8 @@ public class Entity {
 			return false;
 		}
 	}
+
+	/************************************/
 
 	/************ Renderização ************/
 
@@ -136,6 +164,8 @@ public class Entity {
 		// g.fillRect(this.getX() + maskX - Camera.x, this.getY() + maskY - Camera.y,
 		// maskWidth, maskHeight);
 	}
+
+	
 
 	/************************************/
 }

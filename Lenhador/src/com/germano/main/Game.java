@@ -1,10 +1,8 @@
 package com.germano.main;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -23,7 +21,7 @@ import com.germano.entities.Player;
 import com.germano.entities.Shoot;
 import com.germano.graficos.Spritesheet;
 import com.germano.graficos.UI;
-
+import com.germano.world.WallTile;
 import com.germano.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
@@ -42,6 +40,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private int maxLevel = 2;
 
 	public static JFrame frame;
+	public static List<WallTile> walls;
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
 	public static List<Shoot> shoot;
@@ -61,6 +60,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static boolean showMessageGameOver = false;
 	private int framesGameOver = 0;
 	private boolean restartGame = false;
+
+	
 
 	/************************************/
 
@@ -85,6 +86,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		shoot = new ArrayList<Shoot>();
+		walls = new ArrayList<WallTile>();
 
 		spritesheet = new Spritesheet("/spritesheet.png");
 		player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
@@ -186,6 +188,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		} else if (gameState.equals("MENU")) {
 			menu.tick();
 		}
+		for (int i = 0; i < walls.size(); i++) {
+			walls.get(i).tick();
+		}
+		
 	}
 
 	/************************************/

@@ -1,5 +1,6 @@
 package com.germano.world;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,7 +8,12 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.germano.entities.*;
+import com.germano.entities.Ammo;
+import com.germano.entities.Enemy;
+import com.germano.entities.Entity;
+import com.germano.entities.Heart;
+import com.germano.entities.Player;
+import com.germano.entities.Weapon;
 import com.germano.graficos.Spritesheet;
 import com.germano.main.Game;
 
@@ -45,10 +51,13 @@ public class World {
 					tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
 					if (pixelAtual == 0xFF000000) {
 						// Chão
-						tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
+						FloorTile floor = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
+						tiles[xx + (yy * WIDTH)] = floor;
 					} else if (pixelAtual == 0xFFFFFFFF) {
 						// Parede
-						tiles[xx + (yy * WIDTH)] = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
+						WallTile wall = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
+						tiles[xx + (yy * WIDTH)] = wall;
+						Game.walls.add(wall);
 					} else if (pixelAtual == 0xFF0026FF) {
 						// Player
 						Game.player.setX(xx * 16);
@@ -139,7 +148,9 @@ public class World {
 				}
 				Tile tile = tiles[xx + (yy * WIDTH)];
 				tile.render(g);
+			
 			}
+			
 		}
 	}
 

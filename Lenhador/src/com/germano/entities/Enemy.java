@@ -1,5 +1,6 @@
 package com.germano.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -73,20 +74,20 @@ public class Enemy extends Entity {
 		// Se o inimigo não está colidindo com o jogador
 		if (this.isCollidingPlayer() == false) {
 			// Movimentação dos Inimigos, Seguir o jogador até colidir
-			if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY(),this.getZ())
+			if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY(), this.getZ())
 					&& !isCollidingEnemy((int) (x + speed), this.getY())) {
 				moved = true;
 				x += speed;
-			} else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY(),this.getZ())
+			} else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY(), this.getZ())
 					&& !isCollidingEnemy((int) (x - speed), this.getY())) {
 
 				moved = true;
 				x -= speed;
-			} else if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed),this.getZ())
+			} else if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed), this.getZ())
 					&& !isCollidingEnemy(this.getX(), (int) (y + speed))) {
 				moved = true;
 				y += speed;
-			} else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed),this.getZ())
+			} else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed), this.getZ())
 					&& !isCollidingEnemy(this.getX(), (int) (y - speed))) {
 				moved = true;
 				y -= speed;
@@ -144,6 +145,7 @@ public class Enemy extends Entity {
 		}
 
 		collidingBullet();
+		
 	}
 
 	// Entrega os pontos do inimigo e o remove do jogo
@@ -160,7 +162,7 @@ public class Enemy extends Entity {
 		Game.enemies.remove(this);
 	}
 
-	// Verifica se o inimigo estão colidindo com o tiro
+	// Verifica se os inimigos estão colidindo com o tiro
 	public void collidingBullet() {
 		for (int i = 0; i < Game.shoot.size(); i++) {
 			Entity e = Game.shoot.get(i);
@@ -209,7 +211,7 @@ public class Enemy extends Entity {
 			} else if (dir == left_dir) {
 				g.drawImage(leftEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 			}
-		// Mostra a imagem do inimigo levando dano
+			// Mostra a imagem do inimigo levando dano
 		} else {
 			g.drawImage(Entity.ENEMY_WHITE_EN, this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}

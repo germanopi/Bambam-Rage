@@ -6,7 +6,10 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.germano.main.Game;
+import com.germano.main.Sound;
 import com.germano.world.Camera;
+import com.germano.world.Tile;
+import com.germano.world.WallTile;
 
 public class Shoot extends Entity {
 
@@ -42,13 +45,12 @@ public class Shoot extends Entity {
 		this.maskY = -8;
 		this.maskWidth = 16;
 		this.maskHeight = 16;
-
 	}
 
 	/************************************/
 
 	/************ Lógica ************/
-	
+
 	// Muda a posição das balas e remove depois de um tempo
 	public void tick() {
 		x += dir_x * speed;
@@ -72,11 +74,11 @@ public class Shoot extends Entity {
 		} else if (Game.player.dir == 1) {
 			g.drawImage(Game.player.SHOOT_LEFT_EN, this.getX() - 8 - Camera.x, this.getY() - 8 - Camera.y, null);
 		}
+
 		// Mostra a mascara de colisão dos tiros
 		// g.setColor(Color.blue);
 		// g.fillRect(this.getX() + maskX - Camera.x, this.getY() + maskY - Camera.y,
 		// maskWidth, maskHeight);
 	}
 }
-
 /************************************/
