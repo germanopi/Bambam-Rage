@@ -21,4 +21,7 @@
  
 - Mudar Dificuldade ( IMPLEMENTADO )
 - Mutiplicar Pontos pela Dificuldade ( IMPLEMENTADO )
-- Bala colidir com as paredes
+- Bala colidir com as paredes ( IMPLEMENTADO )
+- Corrigir menu ( IMPLEMENTADO )
+- Corrigir balas colodindo com  paredes de outros mapas ( IMPLEMENTADO )
+

@@ -15,7 +15,7 @@ public class WallTile extends Tile {
 	// Posições e tamanho das paredes
 	protected int x = 0;
 	protected int y = 0;
-	
+
 	// Posição e tamanho da mascara de colisão das paredes
 	private int maskX = 0;
 	private int maskY = 0;
@@ -28,10 +28,10 @@ public class WallTile extends Tile {
 
 	public WallTile(int x, int y, BufferedImage sprite) {
 		super(x, y, sprite);
-		
+
 		this.x = x;
 		this.y = y;
-		
+
 		this.maskX = 0;
 		this.maskY = 0;
 		this.maskWidth = 16;
@@ -119,9 +119,8 @@ public class WallTile extends Tile {
 		g.drawImage(sprite, (int) this.getX() - Camera.x, (int) this.getY() - Camera.y, null);
 
 		// Mostra as mascaras de colisão das paredes
-		// g.setColor(Color.blue);
-		// g.fillRect(this.getX() + maskX - Camera.x, this.getY() + maskY - Camera.y,
-		// maskWidth, maskHeight);
+		//g.setColor(Color.blue);
+		//g.fillRect(this.getX() + maskX - Camera.x, this.getY() + maskY - Camera.y, maskWidth, maskHeight);
 	}
 
 	/************************************/

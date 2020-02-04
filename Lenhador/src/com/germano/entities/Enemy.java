@@ -111,7 +111,7 @@ public class Enemy extends Entity {
 			} else if (Game.dificult.equals("HARD")) {
 				// O player tem 50% chance de perder vida ao ser atacado
 				if (Game.rand.nextInt(100) < 50) {
-					Game.player.life -= Game.rand.nextInt(3);
+				Game.player.life -= Game.rand.nextInt(3);
 					Sound.playerHurt.play();
 					Game.player.isDamaged = true;
 				}

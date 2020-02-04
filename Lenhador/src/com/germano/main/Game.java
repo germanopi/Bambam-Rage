@@ -59,9 +59,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Animação de Game Over
 	public static boolean showMessageGameOver = false;
 	private int framesGameOver = 0;
-	private boolean restartGame = false;
-
 	
+	// Verifica se é necessario recomeçar o jogo depois de morrer
+	public boolean reiniciado = false;
+
 
 	/************************************/
 
@@ -145,8 +146,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	// Atualiza o jogo
 	public void tick() {
-		this.restartGame = false; // Previne que se apertar Enter durante o jogo a tela de Game Over apareça
-		// Atualiza o jogo enquanto não estiver pausado
+		// Atualiza o jogo durante gameplay
 		if (gameState.equals("NORMAL")) {
 			for (int i = 0; i < entities.size(); i++) {
 				Entity e = entities.get(i);
@@ -155,7 +155,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			for (int i = 0; i < shoot.size(); i++) {
 				shoot.get(i).tick();
 			}
-
 			// Verifica se pode passar de level
 			if (enemies.size() == 0) {
 				currentLevel++;
@@ -176,22 +175,21 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					this.showMessageGameOver = true;
 				}
 			}
-			// Se Enter foi apertado reinicia o jogo
-			if (restartGame) {
-				this.restartGame = false;
-				this.gameState = "NORMAL";
-				currentLevel = 1;
+			// Atualiza o menu se estiver nele
+		} else if (gameState.equals("MENU")) {
+			// Reinicia o jogo 
+			if (reiniciado == true) {
+				reiniciado = false;
 				String newWorld = "level" + currentLevel + ".png";
 				World.restartGame(newWorld);
 			}
-			// Atualiza o menu se estiver nele
-		} else if (gameState.equals("MENU")) {
 			menu.tick();
 		}
+
 		for (int i = 0; i < walls.size(); i++) {
 			walls.get(i).tick();
 		}
-		
+
 	}
 
 	/************************************/
@@ -227,20 +225,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// Renderiza a interface
 		ui.render(g);
 
-		// Limpa dados das imagens utilizadas antes
-		g.dispose();
-
 		// Renderiza na tela
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 
-		// Desenha a tela de Game Over
-		if (gameState.equals("GAME_OVER")) {
+		// Desenha a tela de Game Over ou o Menu
+		if (gameState.equals("GAME_OVER") ) {
 			UI.telaGameOver(g);
 		} else if (gameState.equals("MENU")) {
 			menu.render(g);
 		}
-
+		// Limpa dados das imagens utilizadas antes
+		g.dispose();
 		// Exibe toda renderização
 		bs.show();
 	}
@@ -278,7 +274,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 			// Imprime a mensagem a cada 1 segundo
 			if (System.currentTimeMillis() - timer >= 1000) {
-				System.out.println("FPS: " + frames);
+				//System.out.println("FPS: " + frames);
 				frames = 0;
 				timer += 1000;
 			}
@@ -338,16 +334,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.jump = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			this.restartGame = true;
-			if (gameState == "MENU") {
+			if (gameState.equals("MENU")) {
 				menu.enter = true;
-
+			}
+			if (gameState.equals("GAME_OVER")) {
+				gameState = "MENU";
+				reiniciado = true;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			gameState = "MENU";
 			menu.pause = true;
 		}
+
 	}
 
 	@Override

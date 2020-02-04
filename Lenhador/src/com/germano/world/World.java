@@ -118,7 +118,7 @@ public class World {
 
 	// Recomeça o jogo
 	public static void restartGame(String level) {
-
+		Game.walls = new ArrayList<WallTile>();
 		Game.entities = new ArrayList<Entity>();
 		Game.enemies = new ArrayList<Enemy>();
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
@@ -148,9 +148,9 @@ public class World {
 				}
 				Tile tile = tiles[xx + (yy * WIDTH)];
 				tile.render(g);
-			
+
 			}
-			
+
 		}
 	}
 

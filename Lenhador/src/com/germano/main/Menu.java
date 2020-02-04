@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import com.germano.world.World;
+
 public class Menu {
 
 	/************ Atributos ************/
@@ -34,7 +36,7 @@ public class Menu {
 	/************ Lógica ************/
 
 	public void tick() {
-		// Quando apertar para cima suba a opção 
+		// Quando apertar para cima suba a opção
 		if (up) {
 			up = false;
 			// no Menu
@@ -43,7 +45,7 @@ public class Menu {
 				if (currentOption < 0) {
 					currentOption = maxOptionsMenu;
 				}
-			// nas Dificuldades
+				// nas Dificuldades
 			} else if (isDific) {
 				currentDific--;
 				if (currentDific < 0) {
@@ -52,7 +54,7 @@ public class Menu {
 			}
 		}
 
-		// Quando apertar para baixo desça a opção 
+		// Quando apertar para baixo desça a opção
 		if (down) {
 			down = false;
 			// no Menu
@@ -61,7 +63,7 @@ public class Menu {
 				if (currentOption > maxOptionsMenu) {
 					currentOption = 0;
 				}
-			// nas Dificuldades
+				// nas Dificuldades
 			} else if (isDific) {
 				currentDific++;
 				if (currentDific > maxDific) {
@@ -73,19 +75,19 @@ public class Menu {
 		// Quando apertar enter entre ....
 		if (enter) {
 			enter = false;
-			// ... no Novo Jogo 
+			// ... no Novo Jogo
 			if (isMenu && options[currentOption].equals("Novo Jogo")) { // Se escolher Novo Jogo
 				// Se vier ao menu apertando esc
 				if (pause) {
 					isDific = false;
 					Game.gameState = "NORMAL";
 					pause = false;
-				// Se vier do menu principal
+					// Se vier do menu principal
 				} else {
 					isDific = true;
 					isMenu = false;
 				}
-			// ... nas Dificuldades
+				// ... nas Dificuldades
 			} else if (isDific && difficult[currentDific].contentEquals("EASY")) {
 				Game.dificult = "EASY";
 				Game.gameState = "NORMAL";
@@ -104,13 +106,12 @@ public class Menu {
 				isDific = false;
 				isMenu = true;
 				pause = false;
-			// ... Na seleção de saves
+				// ... Na seleção de saves
 			} else if (options[currentOption].equals("Carregar")) {
-				
-			// ... Saia do jogo
+				// ... Saia do jogo
 			} else if (options[currentOption].equals("Sair")) {
 				System.exit(1);
-			}
+			} 
 		}
 
 	}
@@ -140,7 +141,7 @@ public class Menu {
 			if (pause == false) {
 				g.drawString("Novo Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
-			// Se o jogo foi pausado no meio
+				// Se o jogo foi pausado no meio
 			} else {
 				g.drawString("Continuar", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
@@ -157,7 +158,7 @@ public class Menu {
 			} else if (options[currentOption].equals("Sair")) {
 				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
 			}
-		// Se estiver no menu de dificuldades
+			// Se estiver no menu de dificuldades
 		} else if (isDific) {
 			// Cria as opções de dificuldade
 			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
