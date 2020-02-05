@@ -33,10 +33,10 @@ public class Menu {
 
 	/************************************/
 
-	/************ Lógica ************/
+	/************ LÃ³gica ************/
 
 	public void tick() {
-		// Quando apertar para cima suba a opção
+		// Quando apertar para cima suba a opÃ§Ã£o
 		if (up) {
 			up = false;
 			// no Menu
@@ -54,7 +54,7 @@ public class Menu {
 			}
 		}
 
-		// Quando apertar para baixo desça a opção
+		// Quando apertar para baixo desÃ§a a opÃ§Ã£o
 		if (down) {
 			down = false;
 			// no Menu
@@ -106,10 +106,10 @@ public class Menu {
 				isDific = false;
 				isMenu = true;
 				pause = false;
-				// ... Na seleção de saves
+				// ... Na seleÃ§Ã£o de saves
 			} else if (options[currentOption].equals("Carregar")) {
 				// ... Saia do jogo
-			} else if (options[currentOption].equals("Sair")) {
+			} if (options[currentOption].equals("Sair")) {
 				System.exit(1);
 			} 
 		}
@@ -118,7 +118,7 @@ public class Menu {
 
 	/************************************/
 
-	/************ Renderização ************/
+	/************ RenderizaÃ§Ã£o ************/
 
 	public void render(Graphics g) {
 		// Criar background transparente
@@ -134,10 +134,10 @@ public class Menu {
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 36));
 
-		// Cria as opções do menu
-		// Se não estiver no menu de dificuldades
+		// Cria as opÃ§Ãµes do menu
+		// Se nÃ£o estiver no menu de dificuldades
 		if (!isDific) {
-			// Se o jogo não foi pausado no meio
+			// Se o jogo nÃ£o foi pausado no meio
 			if (pause == false) {
 				g.drawString("Novo Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
@@ -150,7 +150,7 @@ public class Menu {
 					((Game.HEIGHT * Game.SCALE) / 2) + 200);
 			g.drawString("Sair", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
 
-			// Cria o selecionador de opções
+			// Cria o selecionador de opÃ§Ãµes
 			if (options[currentOption].equals("Novo Jogo")) {
 				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			} else if (options[currentOption].equals("Carregar Jogo")) {
@@ -160,7 +160,7 @@ public class Menu {
 			}
 			// Se estiver no menu de dificuldades
 		} else if (isDific) {
-			// Cria as opções de dificuldade
+			// Cria as opÃ§Ãµes de dificuldade
 			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			g.drawString("Medium", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 200);
 			g.drawString("Hard", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
