@@ -1,4 +1,4 @@
-# Lenhador
+# Bambam's Rage
 
 Jogo Desenvolvido em Java 
 
