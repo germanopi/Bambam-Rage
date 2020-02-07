@@ -1,6 +1,0 @@
-level->;
-vida->;::
-ammo->A?
-x-><?C
-y->=@B
-pontos-><:

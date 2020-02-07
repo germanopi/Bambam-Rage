@@ -12,6 +12,15 @@ public class UI {
 
 	/************ Renderização ************/
 
+	// Rotaciona um retangulo pelo mouse
+	public static void rotacionaRetangulo(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		double angleMouse = Math.atan2(200 + 25 - Game.mouse_y, 200 + 25 - Game.mouse_x);
+		g2.rotate(angleMouse, 200 + 25, 200 + 25);
+		g2.setColor(Color.red);
+		g2.fillRect(200, 200, 50, 50);
+	}
+
 	// Cria a tela de Game Over
 	public static void telaGameOver(Graphics g) {
 		if (Game.gameState.equals("GAME_OVER")) {
@@ -45,7 +54,7 @@ public class UI {
 		g.fillRect(8, 4, (int) ((Game.player.life / Player.maxLife) * 50), 6);
 		// Contador Vida
 		g.setColor(Color.white);
-		g.setFont(new Font("arial", Font.BOLD, 9));
+		g.setFont(Game.newfont);
 		g.drawString((int) Game.player.life + "/" + (int) Player.maxLife, 58, 10);
 		// Barra de munição
 		g.setColor(Color.black);
@@ -54,11 +63,11 @@ public class UI {
 		g.fillRect(8, 12, (int) ((Game.player.ammo / Game.player.maxAmmo) * 50), 6);
 		// Contador de munição
 		g.setColor(Color.white);
-		g.setFont(new Font("arial", Font.BOLD, 9));
+		g.setFont(Game.newfont);
 		g.drawString((int) Game.player.ammo + "/" + (int) Game.player.maxAmmo, 58, 20);
 		// Contador de pontos
 		g.setColor(Color.white);
-		g.setFont(new Font("arial", Font.BOLD, 9));
+		g.setFont(Game.newfont);
 		g.drawString("Pontos: " + Game.pontos, 8, 30);
 	}
 

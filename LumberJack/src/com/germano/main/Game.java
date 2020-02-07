@@ -1,14 +1,21 @@
 package com.germano.main;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,11 +31,14 @@ import com.germano.graficos.UI;
 import com.germano.world.WallTile;
 import com.germano.world.World;
 
-public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
+public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
 	/************ Atributos ************/
 
 	private boolean isRunning = true;
+
+	// Verifica se possui um save pronto para ser carregado
+	public boolean saveGame = false;
 
 	// Tamanho da tela
 	public static final int WIDTH = 400;
@@ -56,6 +66,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private Thread thread;
 	private BufferedImage image;
 
+	// Gerencia a fonte
+	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
+	public static Font newfont;
+
 	// Animação de Game Over
 	public static boolean showMessageGameOver = false;
 	private int framesGameOver = 0;
@@ -66,8 +80,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Conta os pontos do jogador, está aqui porque reiniciar apaga o jogador atual
 	public static int pontos = 0;
 
-	// Gerencia save
-	public boolean saveGame = false;
+	// Gerencia do mouse
+	public static int mouse_x;
+	public static int mouse_y;
 
 	/************************************/
 
@@ -81,6 +96,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
 		addMouseListener(this);
+		addMouseMotionListener(this);
 
 		// Seleciona o tamanho da janela
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -88,20 +104,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		// Inicializa os Objetos
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		shoot = new ArrayList<Shoot>();
 		walls = new ArrayList<WallTile>();
-
 		spritesheet = new Spritesheet("/spritesheet.png");
 		player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
-
 		world = new World("/level1.png");
 		rand = new Random();
 		ui = new UI();
 		menu = new Menu();
+		try {
+			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(16f);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/************************************/
@@ -248,6 +269,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		} else if (gameState.equals("MENU")) {
 			menu.render(g);
 		}
+
+		// Cria retangulo que rotaciona pelo mouse
+		// UI.rotacionaRetangulo(g);
+
 		// Limpa dados das imagens utilizadas antes
 		g.dispose();
 		// Exibe toda renderização
@@ -410,6 +435,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		this.mouse_x = e.getX();
+		this.mouse_y = e.getY();
 	}
 
 	/************************************/

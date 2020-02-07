@@ -193,7 +193,6 @@ public class Menu {
 						line += trans[1];
 						line += "/";
 					}
-					System.out.println(line);
 				} catch (IOException e) {
 				}
 			} catch (FileNotFoundException e) {
