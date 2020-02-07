@@ -43,7 +43,7 @@ public class Player extends Entity {
 	private BufferedImage playerDamage;
 
 	// Atributos do jogador
-	public double life = 100;
+	public static double life = 100;
 	public static double maxLife = 100;
 	public double ammo = 0;
 	public int maxAmmo = 100;
@@ -71,12 +71,10 @@ public class Player extends Entity {
 	/************ Construtor ************/
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
-
 		super(x, y, width, height, sprite);
-
 		rightPlayer = new BufferedImage[4];
 		leftPlayer = new BufferedImage[4];
-
+		
 		// Guarda os sprites de dano do jogador
 		playerDamage = Game.spritesheet.getSprite(16, 64, 16, 16);
 
@@ -219,7 +217,7 @@ public class Player extends Entity {
 		// Game Over
 		if (life <= 0) {
 			life = 0;
-			
+
 			Game.gameState = "GAME_OVER";
 
 		}
@@ -280,16 +278,16 @@ public class Player extends Entity {
 				g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 				// desenha arma para direita
 				if (hasWeapon) {
-					g.drawImage(Entity.AXE_WEAPON_RIGHT_EN, this.getX() + 9 - Camera.x,
-							this.getY() + 6 - Camera.y - z, null);
+					g.drawImage(Entity.AXE_WEAPON_RIGHT_EN, this.getX() + 9 - Camera.x, this.getY() + 6 - Camera.y - z,
+							null);
 				}
 				// desenha jogador para esquerda
 			} else if (dir == left_dir) {
 				g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
 				// desenha arma para esquerda
 				if (hasWeapon) {
-					g.drawImage(Entity.AXE_WEAPON_LEFT_EN, this.getX() - 9 - Camera.x,
-							this.getY() + 6 - Camera.y - z, null);
+					g.drawImage(Entity.AXE_WEAPON_LEFT_EN, this.getX() - 9 - Camera.x, this.getY() + 6 - Camera.y - z,
+							null);
 				}
 			}
 			// Se levou dano

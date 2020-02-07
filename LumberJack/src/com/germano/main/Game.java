@@ -63,9 +63,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Verifica se é necessario recomeçar o jogo depois de morrer
 	public boolean reiniciado = false;
 
-	// Conta os pontos do jogador, está aqui porque reiniciar o jogo apaga o jogador
-	// atual
+	// Conta os pontos do jogador, está aqui porque reiniciar apaga o jogador atual
 	public static int pontos = 0;
+
+	public boolean saveGame = false;
 
 	/************************************/
 
@@ -74,7 +75,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Game() {
 
 		// Ativa a musica de fundo
-		Sound.musicBackground.loop();
+		// Sound.musicBackground.loop();
 
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
@@ -151,6 +152,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void tick() {
 		// Atualiza o jogo durante gameplay
 		if (gameState.equals("NORMAL")) {
+			if (this.saveGame) {
+				this.saveGame = false;
+				String[] opt1 = { "level", "vida", "ammo", "x", "y" };
+				int[] opt2 = { this.currentLevel, (int) this.player.life, (int) player.ammo, player.getX(),
+						player.getY() };
+				Menu.saveGame(opt1, opt2,10);
+				System.out.println("Jogo Salvo");
+			}
 			for (int i = 0; i < entities.size(); i++) {
 				Entity e = entities.get(i);
 				e.tick();
@@ -311,6 +320,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				menu.down = true;
 			}
 		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (gameState == "NORMAL") {
+				this.saveGame = true;
+			}
+
+		}
 
 	}
 
@@ -354,6 +369,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			} else {
 				gameState = "MENU";
 				menu.pause = true;
+				menu.isMenu = true;
 			}
 
 		}

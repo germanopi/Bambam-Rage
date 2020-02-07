@@ -24,12 +24,11 @@
 - Bala colidir com as paredes ( IMPLEMENTADO )
 - Corrigir menu ( IMPLEMENTADO )
 - Corrigir balas colodindo com  paredes de outros mapas ( IMPLEMENTADO )
-
 - Mudar Sprites para Bambam's Rage ( IMPLEMENTADO )
 - Mudar Sons para Bambam's Rage ( IMPLEMENTADO )
 - Corrigir pontos zerando cada fase ( IMPLEMENTADO )
 - Diminuida a dificuldade ( IMPLEMENTADO )
-
 - Mudando tema para LumberJack ( IMPLEMENTADO )
 - Correção Esc no Menu ( IMPLEMENTADO )
-
+- Consertar criptografia de save ,adicionar munição, pontos e posição (IMPLEMENTADO)
+ 
