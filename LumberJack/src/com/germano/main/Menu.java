@@ -128,7 +128,7 @@ public class Menu {
 				isDific = false;
 				isMenu = false;
 				pause = false;
-				// ... Na seleção de saves
+				// ... Carregue o save
 			} else if (options[currentOption].equals("Carregar Jogo")) {
 				file = new File("save.txt");
 				if (file.exists()) {
@@ -164,6 +164,9 @@ public class Menu {
 			case "y":
 				Game.player.setY(Integer.parseInt(spl2[1]));
 				break;
+			case "pontos":
+				Game.pontos = (Integer.parseInt(spl2[1]));
+				break;
 			}
 		}
 	}
@@ -182,7 +185,7 @@ public class Menu {
 						char[] val = trans[1].toCharArray();
 						trans[1] = "";
 						for (int i = 0; i < val.length; i++) {
-							val[i]-=encode;
+							val[i] -= encode;
 							trans[1] += val[i];
 						}
 						line += trans[0];
@@ -200,7 +203,7 @@ public class Menu {
 	}
 
 	// Salva o jogo em um arquivo de save (atributo, valor do atributo)
-	public static void saveGame(String[] val1, int[] val2,int encode) {
+	public static void saveGame(String[] val1, int[] val2, int encode) {
 		BufferedWriter write = null;
 		try {
 			write = new BufferedWriter(new FileWriter("save.txt"));
@@ -213,7 +216,7 @@ public class Menu {
 			current += "->";
 			char[] value = Integer.toString(val2[i]).toCharArray();
 			for (int n = 0; n < value.length; n++) {
-				value[n]+=encode;
+				value[n] += encode;
 				current += value[n];
 			}
 			try {

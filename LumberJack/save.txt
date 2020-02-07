@@ -1,5 +1,6 @@
 level->;
 vida->;::
-ammo->;::
-x->C=
-y->==:
+ammo->A?
+x-><?C
+y->=@B
+pontos-><:

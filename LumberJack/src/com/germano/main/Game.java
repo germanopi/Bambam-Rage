@@ -66,6 +66,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Conta os pontos do jogador, está aqui porque reiniciar apaga o jogador atual
 	public static int pontos = 0;
 
+	// Gerencia save
 	public boolean saveGame = false;
 
 	/************************************/
@@ -154,10 +155,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if (gameState.equals("NORMAL")) {
 			if (this.saveGame) {
 				this.saveGame = false;
-				String[] opt1 = { "level", "vida", "ammo", "x", "y" };
+				String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
 				int[] opt2 = { this.currentLevel, (int) this.player.life, (int) player.ammo, player.getX(),
-						player.getY() };
-				Menu.saveGame(opt1, opt2,10);
+						player.getY(), Game.pontos };
+				Menu.saveGame(opt1, opt2, 10);
 				System.out.println("Jogo Salvo");
 			}
 			for (int i = 0; i < entities.size(); i++) {
@@ -324,9 +325,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			if (gameState == "NORMAL") {
 				this.saveGame = true;
 			}
-
 		}
-
 	}
 
 	@Override
