@@ -9,6 +9,6 @@ Baseado no curso de Games da DankiCode
 * X : Pular
 * W,A,S,D / Direcionais : Andar
 * Esc : Pausar
-* Salva
+* Espaço : Salvar Jogo
 
 
