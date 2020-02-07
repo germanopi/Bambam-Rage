@@ -12,8 +12,7 @@ public class UI {
 
 	/************ Renderização ************/
 
-	// Rotaciona um retangulo pelo mouse
-	public static void rotacionaRetangulo(Graphics g) {
+	public static void rotacionaRetangulo(Graphics g) {// Rotaciona um retangulo pelo mouse
 		Graphics2D g2 = (Graphics2D) g;
 		double angleMouse = Math.atan2(200 + 25 - Game.mouse_y, 200 + 25 - Game.mouse_x);
 		g2.rotate(angleMouse, 200 + 25, 200 + 25);
@@ -21,8 +20,7 @@ public class UI {
 		g2.fillRect(200, 200, 50, 50);
 	}
 
-	// Cria a tela de Game Over
-	public static void telaGameOver(Graphics g) {
+	public static void telaGameOver(Graphics g) {// Cria a tela de Game Over
 		if (Game.gameState.equals("GAME_OVER")) {
 			// adiciona opacidade
 			Graphics2D g2 = (Graphics2D) g;

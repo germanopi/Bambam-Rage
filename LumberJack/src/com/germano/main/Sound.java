@@ -10,9 +10,6 @@ public class Sound {
 	public static final Sound musicBackground = new Sound("/Background.wav");
 	public static final Sound woodHurt = new Sound("/WoodHurt.wav");
 	public static final Sound playerHurt = new Sound("/PlayerHurt.wav");
-	
-
-	/***********************************/
 
 	/************ Lógica ************/
 
@@ -24,8 +21,7 @@ public class Sound {
 		}
 	}
 
-	// Executa o som uma vez
-	public void play() {
+	public void play() {// Executa o som uma vez
 		try {
 			new Thread() {
 				public void run() {
@@ -33,12 +29,10 @@ public class Sound {
 				}
 			}.start();
 		} catch (Throwable e) {
-
 		}
 	}
 
-	// Executa o som repetidamente
-	public void loop() {
+	public void loop() {// Executa o som repetidamente
 		try {
 			new Thread() {
 				public void run() {
@@ -46,7 +40,6 @@ public class Sound {
 				}
 			}.start();
 		} catch (Throwable e) {
-
 		}
 	}
 

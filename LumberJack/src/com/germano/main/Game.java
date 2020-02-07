@@ -35,11 +35,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	/************ Atributos ************/
 
-	// Verifica se o jogo está sendo executado
-	private boolean isRunning = true;
-
-	// Verifica se possui um save pronto para ser carregado
-	public boolean saveGame = false;
+	// Verifica se
+	private boolean isRunning = true; // O jogo está sendo executado
+	public boolean saveGame = false; // Há um save pronto para ser carregado
+	public boolean reiniciado = false; // Necessidade recomeçar jogo após morrer
 
 	// Gerencia de tela
 	public static final int WIDTH = 400;
@@ -52,7 +51,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public BufferedImage lightmap;
 	public int[] lightMapPixels;
 
-	// Leveis do jogo
+	// Leveis
 	private int currentLevel = 1;
 	private int maxLevel = 2;
 
@@ -71,7 +70,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public Menu menu;
 	private Thread thread;
 
-	// Gerencia a fonte
+	// Fonte
 	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
 	public static Font newfont;
 
@@ -79,24 +78,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static boolean showMessageGameOver = false;
 	private int framesGameOver = 0;
 
-	// Verifica se é necessario recomeçar o jogo depois de morrer
-	public boolean reiniciado = false;
-
-	// Conta os pontos do jogador, está aqui porque reiniciar apaga o jogador atual
+	// Pontos do jogador, está aqui porque reiniciar apaga o jogador atual
 	public static int pontos = 0;
 
 	// Gerencia do mouse
 	public static int mouse_x;
 	public static int mouse_y;
 
-	/************************************/
-
 	/************ Construtor ************/
 
 	public Game() {
 
-		// Ativa a musica de fundo
-		// Sound.musicBackground.loop();
+		// Sound.musicBackground.loop(); // Ativa a musica de fundo
 
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
@@ -138,25 +131,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	}
 
-	/************************************/
-
 	/************ Inicializar ************/
 
 	public void initFrame() {
-		// Cria uma instancia de janela
-		frame = new JFrame("Lumber Jack");
-		// Adiciona o canvas na janela
-		frame.add(this);
-		// Não permite redimencionar a janela
-		frame.setResizable(false);
-		// Calcula as dimensões da janela
-		frame.pack();
-		// Localiza a janela, null está no centro
-		frame.setLocationRelativeTo(null);
-		// Fecha a janela ao clicar em fechar.
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// Permite ver a janela
-		frame.setVisible(true);
+		frame = new JFrame("Lumber Jack");// Cria uma instancia de janela
+		frame.add(this); // Adiciona o canvas na janela
+		frame.setResizable(false);// Não permite redimencionar a janela
+		frame.pack();// Calcula as dimensões da janela
+		frame.setLocationRelativeTo(null);// Localiza a janela, null está no centro
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Fecha a janela ao clicar em fechar.
+		frame.setVisible(true);// Permite ver a janela
 	}
 
 	private synchronized void start() {
@@ -179,15 +163,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		game.start();
 	}
 
-	/************************************/
-
 	/************ Lógica ************/
 
-	// Atualiza o jogo
 	public void tick() {
-		// Atualiza o jogo durante gameplay
 		if (gameState.equals("NORMAL")) {
-			if (this.saveGame) {
+			if (this.saveGame) { // Salva o jogo
 				this.saveGame = false;
 				String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
 				int[] opt2 = { this.currentLevel, (int) this.player.life, (int) player.ammo, player.getX(),
@@ -195,15 +175,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				Menu.saveGame(opt1, opt2, 10);
 				System.out.println("Jogo Salvo");
 			}
-			for (int i = 0; i < entities.size(); i++) {
+			for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
 				Entity e = entities.get(i);
 				e.tick();
 			}
-			for (int i = 0; i < shoot.size(); i++) {
+			for (int i = 0; i < shoot.size(); i++) { // Carrega os tiros
 				shoot.get(i).tick();
 			}
-			// Verifica se pode passar de level
-			if (enemies.size() == 0) {
+			if (enemies.size() == 0) {// Verifica se pode passar de level
 				currentLevel++;
 				if (currentLevel > maxLevel) {
 					currentLevel = 1;
@@ -211,8 +190,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				String newWorld = "level" + currentLevel + ".png";
 				World.restartGame(newWorld);
 			}
-			// Faz a animação de pressionar Enter para reiniciar
-		} else if (gameState.equals("GAME_OVER")) {
+		} else if (gameState.equals("GAME_OVER")) { // Animação do Enter ao morrer
 			this.framesGameOver++;
 			if (this.framesGameOver == 30) {
 				this.framesGameOver = 0;
@@ -222,14 +200,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					this.showMessageGameOver = true;
 				}
 			}
-			// Atualiza o menu se estiver nele
 		} else if (gameState.equals("MENU")) {
-			// Reinicia o jogo
-			if (reiniciado == true) {
+			if (reiniciado == true) {// Reinicia o jogo
 				reiniciado = false;
 				String newWorld = "level" + currentLevel + ".png";
 				World.restartGame(newWorld);
 			}
+			player.updateCamera();
 			menu.tick();
 		}
 
@@ -239,8 +216,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	}
 
-	// Desenha retangulo manipulando pixels
-	public void drawRectangle(int xoff, int yoff) {
+	public void drawRectangle(int xoff, int yoff) {// Desenha retangulo manipulando pixels
 		for (int xx = 0; xx < 32; xx++) {
 			for (int yy = 0; yy < 32; yy++) {
 				int xOff = xx + xoff;
@@ -253,8 +229,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-	// Aplica efeito de luz
-	public void applyLight() {
+	public void applyLight() {// Aplica efeito de luz
 		for (int xx = 0; xx < Game.WIDTH; xx++) {
 			for (int yy = 0; yy < Game.HEIGHT; yy++) {
 				if (lightMapPixels[xx + (yy * Game.WIDTH)] == 0xffffffff) {
@@ -266,11 +241,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-	/************************************/
-
 	/************ Renderização ************/
 
-	public void render() { // Renderiza o jogo
+	public void render() {
 
 		// Sequencia de buffers para otimizar a renderização
 		BufferStrategy bs = this.getBufferStrategy();
@@ -279,75 +252,56 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			return;
 		}
 
-		// Cria Objeto grafico para renderizar na tela
-		Graphics g = image.getGraphics();
+		Graphics g = image.getGraphics();// Objeto grafico que renderiza na tela
+		world.render(g);// Renderiza o mundo
 
-		// Renderiza o mundo
-		world.render(g);
-
-		// Renderiza as entidades
-		for (int i = 0; i < entities.size(); i++) {
+		for (int i = 0; i < entities.size(); i++) { // Renderiza as entidades
 			Entity e = entities.get(i);
 			e.render(g);
 		}
 
-		// Aplica efeito de luz
-		//applyLight();
-
-		// Renderiza as balas
-		for (int i = 0; i < shoot.size(); i++) {
+		for (int i = 0; i < shoot.size(); i++) {// Renderiza as balas
 			shoot.get(i).render(g);
 		}
 
-		// Renderiza a interface
-		ui.render(g);
+		// applyLight(); // Aplica efeito de luz
 
-		// Desenha retangulo manipulando pixels
-		// drawRectangle(xx, yy);
+		ui.render(g);// Renderiza a interface
+
+		player.updateCamera(); // Centraliza a camera
+
+		// drawRectangle(xx, yy); // Desenha retangulo manipulando pixels
 
 		// Renderiza na tela
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 
-		// Desenha a tela de Game Over ou o Menu
-		if (gameState.equals("GAME_OVER")) {
+		if (gameState.equals("GAME_OVER")) { // Cria tela GameOver
 			UI.telaGameOver(g);
-		} else if (gameState.equals("MENU")) {
+		} else if (gameState.equals("MENU")) {// Cria tela Menu
 			menu.render(g);
 		}
 
-		// Cria retangulo que rotaciona pelo mouse
-		// UI.rotacionaRetangulo(g);
+		// UI.rotacionaRetangulo(g); // Cria retangulo que rotaciona pelo mouse
 
-		// Limpa dados das imagens utilizadas antes
-		g.dispose();
-		// Exibe toda renderização
-		bs.show();
+		g.dispose();// Limpa dados das imagens utilizadas antes
+		bs.show();// Exibe toda renderização
+
 	}
-
-	/************************************/
 
 	/************ Game Looping ************/
 
 	public void run() {
-		// Guarda o tempo atual do computador com precisão de nanosegundo
-		long lastTime = System.nanoTime();
-		// Quantidade de frames por segundo
-		double amountOfTicks = 60.0;
-		// Converte segundo em nanosegundo
-		double ns = 1000000000 / amountOfTicks;
+		long lastTime = System.nanoTime();// Guarda o tempo atual do computador com precisão de nanosegundo
+		double amountOfTicks = 60.0;// Quantidade de frames por segundo
+		double ns = 1000000000 / amountOfTicks;// Converte segundo em nanosegundo
 		double delta = 0;
-		// FPS
-		int frames = 0;
-		// Guarda o tempo atual do computador com menos precisão
-		double timer = System.currentTimeMillis();
-		// Focaliza a janela sem necessitar clicar
-		requestFocus();
+		int frames = 0;// FPS
+		double timer = System.currentTimeMillis();// Guarda o tempo atual do computador com menos precisão
+		requestFocus();// Focaliza a janela sem necessitar clicar
 		while (isRunning) {
-			// Guarda o tempo atual do computador com precisão de nanosegundo
-			long now = System.nanoTime();
-			// Calcula o intervalo do tick
-			delta += (now - lastTime) / ns;
+			long now = System.nanoTime();// Guarda o tempo atual do computador com precisão de nanosegundo
+			delta += (now - lastTime) / ns;// Calcula o intervalo do tick
 			// Atualiza agora
 			lastTime = now;
 			if (delta >= 1) {
@@ -356,25 +310,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				frames++;
 				delta--;
 			}
-			// Imprime a mensagem a cada 1 segundo
-			if (System.currentTimeMillis() - timer >= 1000) {
+
+			if (System.currentTimeMillis() - timer >= 1000) { // Imprime fps
 				// System.out.println("FPS: " + frames);
 				frames = 0;
 				timer += 1000;
 			}
 		}
-		// Para as Thread
-		stop();
-
+		stop();// Para as Thread
 	}
-
-	/************************************/
 
 	/************ IO Teclado ************/
 
 	@Override
-	// Ativado se a tecla foi apertada
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {// Ativado se a tecla foi apertada
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
@@ -400,8 +349,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 
 	@Override
-	// Ativado se a tecla foi solta
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(KeyEvent e) {// Ativado se a tecla foi solta
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.right = false;
 
@@ -433,25 +381,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			if (gameState.equals("MENU")) {
-				// Faz nada
 			} else if (gameState.equals("GAME_OVER")) {
-				// Faz nada
 			} else {
 				gameState = "MENU";
 				menu.pause = true;
 				menu.isMenu = true;
 			}
-
 		}
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 
 	}
-
-	/************************************/
 
 	/************ IO Mouse ************/
 
@@ -471,8 +413,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 
 	@Override
-	// Ativado se o mouse foi apertado
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {// Ativado se o mouse foi apertado
 		player.mouseShoot = true;
 		player.pos_mouse_x = (e.getX() / SCALE);
 		player.pos_mouse_y = (e.getY() / SCALE);
@@ -485,7 +426,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 

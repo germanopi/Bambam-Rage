@@ -12,17 +12,15 @@ public class WallTile extends Tile {
 
 	/************ Atributos ************/
 
-	// Posições e tamanho das paredes
+	// Posições e tamanho 
 	protected int x = 0;
 	protected int y = 0;
 
-	// Posição e tamanho da mascara de colisão das paredes
+	// Posição e tamanho da mascara de colisão 
 	private int maskX = 0;
 	private int maskY = 0;
 	private int maskWidth = 16;
 	private int maskHeight = 16;
-
-	/************************************/
 
 	/************ Construtor ************/
 
@@ -38,8 +36,6 @@ public class WallTile extends Tile {
 		this.maskHeight = 16;
 
 	}
-
-	/************************************/
 
 	/************ Get/Set ************/
 
@@ -91,16 +87,13 @@ public class WallTile extends Tile {
 		this.maskHeight = maskHeight;
 	}
 
-	/************************************/
-
 	/************ Lógica ************/
 
 	public void tick() {
 		collidingWall();
 	}
 
-	// Verifica se o inimigo estão colidindo com o tiro
-	public void collidingWall() {
+	public void collidingWall() {// Verifica se o inimigo estão colidindo com o tiro
 		for (int i = 0; i < Game.shoot.size(); i++) {
 			Entity e = Game.shoot.get(i);
 			if (Tile.isCollidingShoot(this, e)) {
@@ -109,8 +102,6 @@ public class WallTile extends Tile {
 			}
 		}
 	}
-
-	/************************************/
 
 	/************ Renderização ************/
 

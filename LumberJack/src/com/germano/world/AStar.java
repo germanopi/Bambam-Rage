@@ -20,7 +20,6 @@ public class AStar {
 			}
 			return 0;
 		}
-
 	};
 
 	public static boolean clear() { // Otimiza o código

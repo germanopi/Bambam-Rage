@@ -8,8 +8,6 @@ public class Node {
 	public Node parent;
 	public double fCost, gCost, hCost;
 	
-	/************************************/
-
 	/************ Construtor ************/
 
 	public Node(Vector2i tile, Node parent, double gCost, double hCost) {

@@ -8,21 +8,19 @@ public class Camera {
 
 	public static int x;
 	public static int y;
-	 
-	/************************************/ 
 
 	/************ Lógica ************/
 
-	// Evita que a camera olhe fora do mapa
-	public static int clamp(int Atual, int Min, int Max) {
+	public static int clamp(int Atual, int Min, int Max) { // Evita que a camera olhe fora do mapa
 		if (Atual < Min) {
 			Atual = Min;
-		} if (Atual > Max) {
+		}
+		if (Atual > Max) {
 			Atual = Max;
 		}
 		return Atual;
 	}
-	
-	/************************************/ 
+
+	/************************************/
 
 }

@@ -7,17 +7,15 @@ import java.awt.image.BufferedImage;
 public class FloorTile extends Tile {
 	/************ Atributos ************/
 
-	// Posições e tamanho do chão
+	// Posições e tamanho 
 	protected int x = 0;
 	protected int y = 0;
 
-	// Posição e tamanho da mascara de colisão do chão
+	// Posição e tamanho da mascara de colisão
 	private int maskX = 0;
 	private int maskY = 0;
 	private int maskWidth = 16;
 	private int maskHeight = 16;
-
-	/************************************/
 
 	/************ Construtor ************/
 
@@ -33,8 +31,6 @@ public class FloorTile extends Tile {
 		this.maskHeight = 16;
 
 	}
-
-	/************************************/
 
 	/************ Get/Set ************/
 
@@ -86,9 +82,8 @@ public class FloorTile extends Tile {
 		this.maskHeight = maskHeight;
 	}
 
-	/************************************/
-
 	/************ Renderização ************/
+	
 	public void render(Graphics g) {
 
 		g.drawImage(sprite, (int) this.getX() - Camera.x, (int) this.getY() - Camera.y, null);

@@ -15,34 +15,32 @@ public class Player extends Entity {
 
 	/************ Atributos ************/
 
-	// Movimentação do jogador
+	// Movimentação
 	public boolean right;
 	public boolean up;
 	public boolean left;
 	public boolean down;
 	private boolean moved = false;
-
-	// Velocidade do jogador
 	public double speed = 1.2;
 
-	// Direção do jogador
+	// Direção
 	public int right_dir = 0;
 	public int left_dir = 1;
 	public int dir = right_dir;
 
-	// Animação do jogador
+	// Animação
 	private int frames = 0;
 	private int maxFrames = 5;
 	private int index = 0;
 	private int maxIndexes = 3;
 	private int damageFrames = 0;
 
-	// Guarda Sprites do jogador
-	private BufferedImage[] rightPlayer;
-	private BufferedImage[] leftPlayer;
+	// Sprites
+	private BufferedImage[] rightPlayer = new BufferedImage[4];;
+	private BufferedImage[] leftPlayer = new BufferedImage[4];;
 	private BufferedImage playerDamage;
 
-	// Atributos do jogador
+	// Atributos
 	public static double life = 100;
 	public static double maxLife = 100;
 	public double ammo = 0;
@@ -66,35 +64,27 @@ public class Player extends Entity {
 	public boolean jumpUp = false;
 	public boolean jumpDown = false;
 
-	/************************************/
-
 	/************ Construtor ************/
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
-		rightPlayer = new BufferedImage[4];
-		leftPlayer = new BufferedImage[4];
-		
+
 		// Guarda os sprites de dano do jogador
 		playerDamage = Game.spritesheet.getSprite(16, 64, 16, 16);
 
-		// Guarda os sprites dos lados do jogador
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) {// Guarda os sprites do lado direito do jogador
 			rightPlayer[i] = Game.spritesheet.getSprite(32 + (i * 16), 64, 16, 16);
 		}
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) {// Guarda os sprites do lado esquerdo do jogador
 			leftPlayer[i] = Game.spritesheet.getSprite(32 + (i * 16), 80, 16, 16);
 		}
 	}
-
-	/************************************/
 
 	/************ Lógica ************/
 
 	public void tick() {
 
-		// Logica do fakejump
-		if (jump) {
+		if (jump) { // fakeJump
 			if (isJumping == false) {
 				jump = false;
 				isJumping = true;
@@ -120,8 +110,7 @@ public class Player extends Entity {
 
 		}
 
-		// Movimentação do personagem
-		moved = false;
+		moved = false; // Movimentação
 		if (right && World.isFree((int) (x + speed), this.getY(), jumpCurrent)) {
 			moved = true;
 			dir = right_dir;
@@ -149,11 +138,9 @@ public class Player extends Entity {
 			}
 		}
 
-		// Confere colisão com items
-		checkItems();
+		checkItems(); // Confere colisão com items
 
-		// Contabiliza o tempo do sprite de dano do jogador
-		if (isDamaged) {
+		if (isDamaged) {// Conta o tempo da animação de dano do jogador
 			this.damageFrames++;
 			if (this.damageFrames == 10) {
 				this.damageFrames = 0;
@@ -161,8 +148,7 @@ public class Player extends Entity {
 			}
 		}
 
-		// Atirar com o teclado
-		if (shoot) {
+		if (shoot) {// Atirar com o teclado
 			shoot = false;
 			if (hasWeapon && ammo > 0) {
 				ammo--;
@@ -178,15 +164,13 @@ public class Player extends Entity {
 					dir_x = -1;
 					pos_x = -6;
 					pos_y = 9;
-
 				}
 				Shoot shoot = new Shoot(this.getX() + pos_x, this.getY() + pos_y, 16, 16, null, dir_x, dir_y);
 				Game.shoot.add(shoot);
 			}
 		}
 
-		// Atirar com o mouse
-		if (mouseShoot) {
+		if (mouseShoot) {// Atirar com o mouse
 			mouseShoot = false;
 			if (hasWeapon && ammo > 0) {
 				ammo--;
@@ -214,23 +198,18 @@ public class Player extends Entity {
 
 		}
 
-		// Game Over
-		if (life <= 0) {
+		if (life <= 0) { // Jogador está morto
 			life = 0;
 			Game.gameState = "GAME_OVER";
 		}
-
-		updateCamera();
 	}
 
-	// Centralizar camera no jogador e limita a area do mapa
-	public void updateCamera() {
+	public void updateCamera() {// Centralizar camera no jogador
 		Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);
 		Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * 16 - Game.HEIGHT);
 	}
 
-	// Verifica colisão com cada tipo de item
-	public void checkItems() {
+	public void checkItems() {// Verifica colisões com items
 		for (int i = 0; i < Game.entities.size(); i++) {
 			Entity e = Game.entities.get(i);
 			// Colisão com Heart
@@ -264,52 +243,41 @@ public class Player extends Entity {
 		}
 	}
 
-	/************************************/
-
 	/************ Renderização ************/
 
 	public void render(Graphics g) {
-		// Se não levou dano
-		if (!isDamaged) {
-			// desenha jogador para direita
-			if (dir == right_dir) {
+
+		if (!isDamaged) {// Se não levou dano
+			if (dir == right_dir) {// desenha jogador para direita
 				g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				// desenha arma para direita
-				if (hasWeapon) {
+				if (hasWeapon) {// desenha arma para direita
 					g.drawImage(Entity.AXE_WEAPON_RIGHT_EN, this.getX() + 9 - Camera.x, this.getY() + 6 - Camera.y - z,
 							null);
 				}
-				// desenha jogador para esquerda
-			} else if (dir == left_dir) {
+			} else if (dir == left_dir) {// desenha jogador para esquerda
 				g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				// desenha arma para esquerda
-				if (hasWeapon) {
+				if (hasWeapon) {// desenha arma para esquerda
 					g.drawImage(Entity.AXE_WEAPON_LEFT_EN, this.getX() - 9 - Camera.x, this.getY() + 6 - Camera.y - z,
 							null);
 				}
 			}
-			// Se levou dano
-		} else {
-			// desenha jogador levando dano
-			if (dir == right_dir) {
+		} else {// Se levou dano
+			if (dir == right_dir) {// desenha jogador levando dano
 				g.drawImage(playerDamage, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				// desenha arma para direita levando dano
-				if (hasWeapon) {
+				if (hasWeapon) {// desenha arma para direita levando dano
 					g.drawImage(Entity.AXE_WEAPON_RIGHT_WHITE_EN, this.getX() + 9 - Camera.x,
 							this.getY() + 6 - Camera.y - z, null);
 				}
-				// desenha jogador para esquerda levando dano
-			} else if (dir == left_dir) {
+			} else if (dir == left_dir) {// desenha jogador para esquerda levando dano
 				g.drawImage(playerDamage, this.getX() - Camera.x, this.getY() - Camera.y - z, null);
-				// desenha arma para esquerda levando dano
-				if (hasWeapon) {
+				if (hasWeapon) {// desenha arma para esquerda levando dano
 					g.drawImage(Entity.AXE_WEAPON_LEFT_WHITE_EN, this.getX() - 9 - Camera.x,
 							this.getY() + 6 - Camera.y - z, null);
 				}
 			}
 		}
-		// Desenha a sombra do pulo
-		if (isJumping) {
+
+		if (isJumping) {// Desenha a sombra do pulo
 			g.setColor(Color.black);
 			g.fillOval(this.getX() - Camera.x + 3, this.getY() - Camera.y + 16, 8, 8);
 		}

@@ -44,8 +44,6 @@ public class Menu {
 	public static boolean saveExists = false;
 	public static boolean saveGame = false;
 
-	/************************************/
-
 	/************ Lógica ************/
 
 	public void tick() {
@@ -56,16 +54,14 @@ public class Menu {
 		} else {
 			saveExists = false;
 		}
-		// Quando apertar para cima suba a opção
+
 		if (up) {
 			up = false;
-			// no Menu
 			if (isMenu) {
 				currentOption--;
 				if (currentOption < 0) {
 					currentOption = maxOptionsMenu;
 				}
-				// nas Dificuldades
 			} else if (isDific) {
 				currentDific--;
 				if (currentDific < 0) {
@@ -74,16 +70,13 @@ public class Menu {
 			}
 		}
 
-		// Quando apertar para baixo desça a opção
 		if (down) {
 			down = false;
-			// no Menu
 			if (isMenu) {
 				currentOption++;
 				if (currentOption > maxOptionsMenu) {
 					currentOption = 0;
 				}
-				// nas Dificuldades
 			} else if (isDific) {
 				currentDific++;
 				if (currentDific > maxDific) {
@@ -92,24 +85,19 @@ public class Menu {
 			}
 		}
 
-		// Quando apertar enter entre ....
 		if (enter) {
 			enter = false;
-			// ... no Novo Jogo
 			if (isMenu && options[currentOption].equals("Novo Jogo")) { // Se escolher Novo Jogo
-				// Se vier ao menu apertando esc
-				if (pause) {
+				if (pause) {// Se vier ao menu apertando esc
 					isDific = false;
 					Game.gameState = "NORMAL";
 					pause = false;
-					// Se vier do menu principal
-				} else {
+				} else {// Se vier do menu principal
 					isDific = true;
 					isMenu = false;
 					file = new File("save.txt");
 					file.delete();
 				}
-				// ... nas Dificuldades
 			} else if (isDific && difficult[currentDific].contentEquals("EASY")) {
 				Game.dificult = "EASY";
 				Game.gameState = "NORMAL";
@@ -128,22 +116,20 @@ public class Menu {
 				isDific = false;
 				isMenu = false;
 				pause = false;
-				// ... Carregue o save
 			} else if (options[currentOption].equals("Carregar Jogo")) {
 				file = new File("save.txt");
 				if (file.exists()) {
 					String saver = loadGame(10);
 					applySave(saver);
 				}
-			} // ... Saia do jogo
+			}
 			if (options[currentOption].equals("Sair")) {
 				System.exit(1);
 			}
 		}
 	}
 
-	// Aplica o save carregado no jogo
-	public static void applySave(String str) {
+	public static void applySave(String str) {// Aplica o save carregado no jogo
 		String[] spl = str.split("/");
 		for (int i = 0; i < spl.length; i++) {
 			String[] spl2 = spl[i].split("->");
@@ -171,8 +157,7 @@ public class Menu {
 		}
 	}
 
-	// Carrega o arquivo de save
-	public static String loadGame(int encode) {
+	public static String loadGame(int encode) {// Carrega o arquivo de save
 		String line = "";
 		File file = new File("save.txt");
 		if (file.exists()) {
@@ -201,8 +186,7 @@ public class Menu {
 		return line;
 	}
 
-	// Salva o jogo em um arquivo de save (atributo, valor do atributo)
-	public static void saveGame(String[] val1, int[] val2, int encode) {
+	public static void saveGame(String[] val1, int[] val2, int encode) {// Salva o jogo em um arquivo de save
 		BufferedWriter write = null;
 		try {
 			write = new BufferedWriter(new FileWriter("save.txt"));
@@ -235,8 +219,6 @@ public class Menu {
 		}
 	}
 
-	/************************************/
-
 	/************ Renderização ************/
 
 	public void render(Graphics g) {
@@ -254,14 +236,11 @@ public class Menu {
 		g.setFont(new Font("arial", Font.BOLD, 36));
 
 		// Cria as opções do menu
-		// Se não estiver no menu de dificuldades
-		if (!isDific) {
-			// Se o jogo não foi pausado no meio
-			if (pause == false) {
+		if (!isDific) { // Se não estiver escolhendo dificuldade
+			if (pause == false) {// Se o jogo não foi pausado 
 				g.drawString("Novo Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
-				// Se o jogo foi pausado no meio
-			} else {
+			} else {// Se o jogo foi pausado 
 				g.drawString("Continuar", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			}
@@ -277,8 +256,7 @@ public class Menu {
 			} else if (options[currentOption].equals("Sair")) {
 				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
 			}
-			// Se estiver no menu de dificuldades
-		} else if (isDific) {
+		} else if (isDific) {// Se estiver escolhendo dificuldades
 			// Cria as opções de dificuldade
 			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			g.drawString("Medium", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 200);

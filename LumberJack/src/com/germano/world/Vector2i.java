@@ -6,8 +6,6 @@ public class Vector2i {
 
 	public int x, y;
 
-	/************************************/
-
 	/************ Construtor ************/
 
 	public Vector2i(int x, int y) {
@@ -15,12 +13,9 @@ public class Vector2i {
 		this.y = y;
 	}
 
-	/************************************/
-
 	/************ Lógica ************/
 
-	// Compara duas posições
-	public boolean equals(Object object) {
+	public boolean equals(Object object) {// Compara duas posições
 		Vector2i vec = (Vector2i) object;
 		if (vec.x == this.x && vec.y == this.y) {
 			return true;

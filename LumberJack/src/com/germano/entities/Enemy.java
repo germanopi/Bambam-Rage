@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 
 import com.germano.main.Game;
 import com.germano.main.Sound;
+import com.germano.world.AStar;
 import com.germano.world.Camera;
+import com.germano.world.Vector2i;
 import com.germano.world.WallTile;
 import com.germano.world.World;
 
@@ -15,135 +17,77 @@ public class Enemy extends Entity {
 
 	/************ Atributos ************/
 
-	// Movimentação dos inimigos
+	// Movimentação
 	private boolean moved = false;
 	private double speed = 1;
 
-	// Direção dos inimigos
+	// Direção
 	public int right_dir = 0;
 	public int left_dir = 1;
 	public int dir = right_dir;
 
-	// Posição e tamanho da mascara de colisão dos inimigos
+	// Posição e tamanho da colisão
 	private int maskX = 0;
 	private int maskY = 0;
 	private int maskWidth = 16;
 	private int maskHeight = 16;
 
-	// Animação dos inimigos
+	// Animação
 	private int frames = 0;
 	private int maxFrames = 5;
 	private int index = 0;
 	private int maxIndexes = 3;
 
-	// Guarda Sprites dos inimigos
-	private BufferedImage[] rightEnemy;
-	private BufferedImage[] leftEnemy;
+	// Sprites
+	private BufferedImage[] rightEnemy = new BufferedImage[4];;
+	private BufferedImage[] leftEnemy = new BufferedImage[4];
 
-	// Atributo dos inimigos
+	// Atributos
 	private int life = 10;
 	private boolean isDamaged = false;
 	private int damageFrames = 10;
 	private int damageCurrent = 0;
-	private static int mortos = 0;
-
-	/************************************/
 
 	/************ Construtor ************/
 
 	public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 
-		rightEnemy = new BufferedImage[4];
-		leftEnemy = new BufferedImage[4];
-
-		// Guarda os sprites dos lados do inimigo
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) {// Guarda os sprites do lado direito dos inimigos
 			rightEnemy[i] = Game.spritesheet.getSprite(32 + (i * 16), 32, 16, 16);
 		}
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) {// Guarda os sprites do lado esquerdo dos inimigos
 			leftEnemy[i] = Game.spritesheet.getSprite(32 + (i * 16), 48, 16, 16);
 		}
 	}
 
-	/************************************/
-
 	/************ Lógica ************/
 
 	public void tick() {
-		moved = false;
-		// Inimigo só segue o jogador se estiver proximo
-		// if (this.calculateDistanced(this.getX(), this.getY(), Game.player.getX(),
-		// Game.player.getY()) < 50) {
-		// Se o inimigo não está colidindo com o jogador
-		if (this.isCollidingPlayer() == false) {
-			// Movimentação dos Inimigos, Seguir o jogador até colidir
-			if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY(), this.getZ())
-					&& !isCollidingEnemy((int) (x + speed), this.getY())) {
-				moved = true;
-				x += speed;
-			} else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY(), this.getZ())
-					&& !isCollidingEnemy((int) (x - speed), this.getY())) {
-				moved = true;
-				x -= speed;
-			} else if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed), this.getZ())
-					&& !isCollidingEnemy(this.getX(), (int) (y + speed))) {
-				moved = true;
-				y += speed;
-			} else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed), this.getZ())
-					&& !isCollidingEnemy(this.getX(), (int) (y - speed))) {
-				moved = true;
-				y -= speed;
-			}
-			// Se o inimigo está colidindo com o jogador
-		} else {
-			if (Game.dificult.equals("EASY")) {
-				// O player tem 10% chance de perder vida ao ser atacado
-				if (Game.rand.nextInt(100) < 10) {
-					Game.player.life -= Game.rand.nextInt(3);
-					Sound.playerHurt.play();
-					Game.player.isDamaged = true;
-				}
-			} else if (Game.dificult.equals("MEDIUM")) {
-				// O player tem 25% chance de perder vida ao ser atacado
-				if (Game.rand.nextInt(100) < 25) {
-					Game.player.life -= Game.rand.nextInt(3);
-					Sound.playerHurt.play();
-					Game.player.isDamaged = true;
-				}
-			} else if (Game.dificult.equals("HARD")) {
-				// O player tem 50% chance de perder vida ao ser atacado
-				if (Game.rand.nextInt(100) < 50) {
-					Game.player.life -= Game.rand.nextInt(3);
-					Sound.playerHurt.play();
-					Game.player.isDamaged = true;
-				}
-			}
+
+		if (path == null || path.size() == 0) { // Calcula o caminho Inimigo->Player
+			Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
+			Vector2i end = new Vector2i((int) (Game.player.x / 16), (int) (Game.player.y / 16));
+			path = AStar.findPath(Game.world, start, end);
 		}
-		// }
 
-		// Muda os frames dos inimigos enquanto andam
-		if (moved)
+		followPath(path);
 
-		{
-			frames++;
-			if (frames == maxFrames) {
-				frames = 0;
-				index++;
-				if (index > maxIndexes) {
-					index = 0;
-				}
+		frames++;
+		if (frames == maxFrames) { // Muda sprite da animação dos inimigos
+			frames = 0;
+			index++;
+			if (index > maxIndexes) {
+				index = 0;
 			}
 		}
 
-		// Se a vida do inimigo acabar ele morre
-		if (life <= 0) {
+		if (life <= 0) {// Remove inimigo morto
 			destroyself();
 			return;
 		}
 
-		// Contabiliza o tempo do sprite de dano dos inimigos
-		if (isDamaged) {
+		if (isDamaged) {// Conta o tempo da animação de dano dos inimigos
 			this.damageCurrent++;
 			if (this.damageCurrent == this.damageFrames) {
 				this.damageCurrent = 0;
@@ -152,12 +96,9 @@ public class Enemy extends Entity {
 		}
 
 		collidingBullet();
-
 	}
 
-	// Entrega os pontos do inimigo e o remove do jogo
-	public void destroyself() {
-
+	public void destroyself() {// Entrega os pontos do inimigo e o remove do jogo
 		if (Game.dificult.equals("EASY")) {
 			Game.pontos += 10;
 		} else if (Game.dificult.equals("MEDIUM")) {
@@ -170,8 +111,7 @@ public class Enemy extends Entity {
 		Game.enemies.remove(this);
 	}
 
-	// Verifica se os inimigos estão colidindo com o tiro
-	public void collidingBullet() {
+	public void collidingBullet() {// Verifica Colisão Inimigo com Tiro
 		for (int i = 0; i < Game.shoot.size(); i++) {
 			Entity e = Game.shoot.get(i);
 			if (Entity.isColliding(this, e)) {
@@ -184,43 +124,22 @@ public class Enemy extends Entity {
 		}
 	}
 
-	// Verifica se os inimigos estão colidindo com o jogador
-	public boolean isCollidingPlayer() {
+	public boolean isCollidingPlayer() {// Verifica Colisão Inimigo com Player
 		Rectangle enemyCurrent = new Rectangle(this.getX() + maskX, this.getY() + maskY, maskWidth, maskHeight);
 		Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
 		return enemyCurrent.intersects(player);
 	}
 
-	// Verifica se os inimigos estão colidindo entre eles
-	public boolean isCollidingEnemy(int xNext, int yNext) {
-		Rectangle enemyCurrent = new Rectangle(xNext + maskX, yNext + maskY, maskWidth, maskHeight);
-		for (int i = 0; i < Game.enemies.size(); i++) {
-			Enemy e = Game.enemies.get(i);
-			if (e == this) {
-				continue;
-			}
-			Rectangle targetEnemy = new Rectangle(e.getX() + maskX, e.getY() + maskY, maskWidth, maskHeight);
-			if (enemyCurrent.intersects(targetEnemy)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/************************************/
-
 	/************ Renderização ************/
 
 	public void render(Graphics g) {
-		// Monstra a imagem do inimigo sem levar dano
-		if (!isDamaged) {
+		if (!isDamaged) {// Monstra a imagem do inimigo sem levar dano
 			if (dir == right_dir) {
 				g.drawImage(rightEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 			} else if (dir == left_dir) {
 				g.drawImage(leftEnemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
 			}
-			// Mostra a imagem do inimigo levando dano
-		} else {
+		} else {// Mostra a imagem do inimigo levando dano
 			g.drawImage(Entity.TREE_WHITE_EN, this.getX() - Camera.x, this.getY() - Camera.y, null);
 		}
 

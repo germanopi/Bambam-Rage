@@ -31,6 +31,7 @@
 - Mudando tema para LumberJack ( IMPLEMENTADO )
 - Correção Esc no Menu ( IMPLEMENTADO )
 - Consertar criptografia de save, adicionar munição, pontos e posição (IMPLEMENTADO)
-
-- Comentar Direito / Otimizar código
+- Melhorar Comentarios ( Feito )
+- remover sprites inuteis ( Feito )
+- Evitar colisão entre inimigos
  

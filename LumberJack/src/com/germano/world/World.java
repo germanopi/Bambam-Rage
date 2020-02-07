@@ -24,16 +24,13 @@ public class World {
 	public static int WIDTH, HEIGHT;
 	public static final int TILE_SIZE = 16;
 
-	/************************************/
-
 	/************ Construtor ************/
 
 	public World(String path) {
 		try {
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
 
-			// Array de todos os pixels do mapa
-			int[] pixels = new int[map.getWidth() * map.getHeight()];
+			int[] pixels = new int[map.getWidth() * map.getHeight()];// Array de todos os pixels do mapa
 
 			WIDTH = map.getWidth();
 			HEIGHT = map.getHeight();
@@ -41,42 +38,33 @@ public class World {
 			// Array de todos os pixels com estruturas fixas (tiles) no mapa
 			tiles = new Tile[map.getWidth() * map.getHeight()];
 
-			// Pega as cores do mapa
-			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
+			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());// Pega as cores do mapa
 
-			// Converte a cor do mapa nos objetos do mapa
-			for (int xx = 0; xx < map.getWidth(); xx++) {
+			for (int xx = 0; xx < map.getWidth(); xx++) {// Converte a cor do mapa nos objetos do mapa
 				for (int yy = 0; yy < map.getHeight(); yy++) {
 					int pixelAtual = pixels[xx + (yy * map.getWidth())];
 					tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
-					if (pixelAtual == 0xFF000000) {
-						// Chão
+					if (pixelAtual == 0xFF000000) {// Chão
 						FloorTile floor = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR);
 						tiles[xx + (yy * WIDTH)] = floor;
-					} else if (pixelAtual == 0xFFFFFFFF) {
-						// Parede
+					} else if (pixelAtual == 0xFFFFFFFF) {// Parede
 						WallTile wall = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
 						tiles[xx + (yy * WIDTH)] = wall;
 						Game.walls.add(wall);
-					} else if (pixelAtual == 0xFF0026FF) {
-						// Player
+					} else if (pixelAtual == 0xFF0026FF) {// Player
 						Game.player.setX(xx * 16);
 						Game.player.setY(yy * 16);
-					} else if (pixelAtual == 0xFFFF0000) {
-						// Inimigo
+					} else if (pixelAtual == 0xFFFF0000) {// Inimigo
 						Enemy tree = new Enemy(xx * 16, yy * 16, 16, 16, Entity.TREE_EN);
 						Game.entities.add(tree);
 						Game.enemies.add(tree);
-					} else if (pixelAtual == 0xFF00FFFF) {
-						// Arma
+					} else if (pixelAtual == 0xFF00FFFF) {// Arma
 						Weapon weapon = new Weapon(xx * 16, yy * 16, 16, 16, Entity.AXE_EN);
 						Game.entities.add(weapon);
-					} else if (pixelAtual == 0xFF4CFF00) {
-						// Coração
+					} else if (pixelAtual == 0xFF4CFF00) { // Coração
 						Heart heart = new Heart(xx * 16, yy * 16, 16, 16, Entity.LIFE_EN);
 						Game.entities.add(heart);
-					} else if (pixelAtual == 0xFFFFD800) {
-						// Munição no chão
+					} else if (pixelAtual == 0xFFFFD800) {// Munição no chão
 						Ammo axe = new Ammo(xx * 16, yy * 16, 16, 16, Entity.AXE_AMMO_EN);
 						Game.entities.add(axe);
 					}
@@ -89,8 +77,7 @@ public class World {
 
 	/************ Lógica ************/
 
-	// Checa se o espaço está vazio
-	public static boolean isFree(int xNext, int yNext, int zPlayer) {
+	public static boolean isFree(int xNext, int yNext, int zPlayer) {// Checa se o espaço está vazio
 		int x1 = xNext / TILE_SIZE;
 		int y1 = yNext / TILE_SIZE;
 
@@ -116,8 +103,7 @@ public class World {
 		}
 	}
 
-	// Recomeça o jogo
-	public static void restartGame(String level) {
+	public static void restartGame(String level) {// Recomeça o jogo
 		Game.walls = new ArrayList<WallTile>();
 		Game.entities = new ArrayList<Entity>();
 		Game.enemies = new ArrayList<Enemy>();
@@ -129,7 +115,7 @@ public class World {
 		return;
 	}
 
-	/************************************/
+	/*********** Renderização ************/
 
 	public void render(Graphics g) {
 
@@ -142,15 +128,12 @@ public class World {
 		// Só renderiza oque está na camera
 		for (int xx = xstart; xx <= xfinal; xx++) {
 			for (int yy = ystart; yy <= yfinal; yy++) {
-				// Evita erro com camera em posição negativa
-				if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT) {
+				if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT) {// Evita erro com camera em posição negativa
 					continue;
 				}
 				Tile tile = tiles[xx + (yy * WIDTH)];
 				tile.render(g);
-
 			}
-
 		}
 	}
 

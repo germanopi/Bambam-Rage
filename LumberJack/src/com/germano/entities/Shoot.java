@@ -11,30 +11,28 @@ import com.germano.world.Camera;
 import com.germano.world.Tile;
 import com.germano.world.WallTile;
 
-public class Shoot extends Entity {
+public class Shoot extends Entity { // Projeteis da arma
 
 	/************ Atributos ************/
 
-	// posições dos tiros
+	// posições
 	private double dir_x;
 	private double dir_y;
-
-	private double speed = 4;
 
 	// Tempo de vida dos tiros
 	private int duration = 0;
 	private int maxDuration = 40;
 
-	// Posição e tamanho da mascara de colisão dos tiros
+	// Posição e tamanho da colisão
 	private int maskX = -8;
 	private int maskY = -8;
 	private int maskWidth = 16;
 	private int maskHeight = 16;
 
-	/************************************/
+	private double speed = 4;
 
 	/************ Construtor ************/
-	// Construtor dos objetos atirados pela arma
+
 	public Shoot(int x, int y, int width, int height, BufferedImage sprite, double dir_x, double dir_y) {
 		super(x, y, width, height, sprite);
 
@@ -51,8 +49,7 @@ public class Shoot extends Entity {
 
 	/************ Lógica ************/
 
-	// Muda a posição das balas e remove depois de um tempo
-	public void tick() {
+	public void tick() {// Muda a posição das balas e remove depois de um tempo
 		x += dir_x * speed;
 		y += dir_y * speed;
 		duration++;
@@ -62,17 +59,14 @@ public class Shoot extends Entity {
 		}
 	}
 
-	/************************************/
-
 	/************ Renderização ************/
 
 	public void render(Graphics g) {
-		// Verifica se o player está virado para direita
-		if (Game.player.dir == 0) {
-			g.drawImage(Game.player.AXE_SHOOT_RIGHT_EN, this.getX() - 3 - Camera.x, this.getY() -6- Camera.y, null);
-			// Verifica se o player está virado para esquerda
-		} else if (Game.player.dir == 1) {
-			g.drawImage(Game.player.AXE_SHOOT_LEFT_EN, this.getX() - 3 - Camera.x, this.getY() -6- Camera.y, null);
+
+		if (Game.player.dir == 0) {// Verifica se o player está virado para direita
+			g.drawImage(Game.player.AXE_SHOOT_RIGHT_EN, this.getX() - 3 - Camera.x, this.getY() - 6 - Camera.y, null);
+		} else if (Game.player.dir == 1) {// Verifica se o player está virado para esquerda
+			g.drawImage(Game.player.AXE_SHOOT_LEFT_EN, this.getX() - 3 - Camera.x, this.getY() - 6 - Camera.y, null);
 		}
 
 		// Mostra a mascara de colisão dos tiros
