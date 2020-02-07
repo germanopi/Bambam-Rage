@@ -45,7 +45,7 @@ public class Enemy extends Entity {
 	private boolean isDamaged = false;
 	private int damageFrames = 10;
 	private int damageCurrent = 0;
-	private static  int mortos = 0;
+	private static int mortos = 0;
 
 	/************************************/
 
@@ -72,6 +72,9 @@ public class Enemy extends Entity {
 
 	public void tick() {
 		moved = false;
+		// Inimigo só segue o jogador se estiver proximo
+		// if (this.calculateDistanced(this.getX(), this.getY(), Game.player.getX(),
+		// Game.player.getY()) < 50) {
 		// Se o inimigo não está colidindo com o jogador
 		if (this.isCollidingPlayer() == false) {
 			// Movimentação dos Inimigos, Seguir o jogador até colidir
@@ -81,7 +84,6 @@ public class Enemy extends Entity {
 				x += speed;
 			} else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY(), this.getZ())
 					&& !isCollidingEnemy((int) (x - speed), this.getY())) {
-
 				moved = true;
 				x -= speed;
 			} else if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed), this.getZ())
@@ -98,7 +100,7 @@ public class Enemy extends Entity {
 			if (Game.dificult.equals("EASY")) {
 				// O player tem 10% chance de perder vida ao ser atacado
 				if (Game.rand.nextInt(100) < 10) {
-				Game.player.life -= Game.rand.nextInt(3);
+					Game.player.life -= Game.rand.nextInt(3);
 					Sound.playerHurt.play();
 					Game.player.isDamaged = true;
 				}
@@ -118,8 +120,12 @@ public class Enemy extends Entity {
 				}
 			}
 		}
+		// }
+
 		// Muda os frames dos inimigos enquanto andam
-		if (moved) {
+		if (moved)
+
+		{
 			frames++;
 			if (frames == maxFrames) {
 				frames = 0;
@@ -151,7 +157,7 @@ public class Enemy extends Entity {
 
 	// Entrega os pontos do inimigo e o remove do jogo
 	public void destroyself() {
-		
+
 		if (Game.dificult.equals("EASY")) {
 			Game.pontos += 10;
 		} else if (Game.dificult.equals("MEDIUM")) {

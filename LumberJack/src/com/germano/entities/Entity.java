@@ -27,12 +27,16 @@ public class Entity {
 	public static BufferedImage AXE_WEAPON_LEFT_EN = Game.spritesheet.getSprite(112, 16, 16, 16);
 	public static BufferedImage AXE_WEAPON_RIGHT_WHITE_EN = Game.spritesheet.getSprite(96, 32, 16, 16);
 	public static BufferedImage AXE_WEAPON_LEFT_WHITE_EN = Game.spritesheet.getSprite(112, 32, 16, 16);
-	
+
 	// Não usado
-	// public static BufferedImage HALTER_EN = Game.spritesheet.getSprite(0, 64, 16,16);
-	// public static BufferedImage HALTER_AMMO_EN = Game.spritesheet.getSprite(0,80, 16, 16);
-	// public static BufferedImage HALTER_SHOOT_OR_HAND_EN =Game.spritesheet.getSprite(96, 64, 16, 16);
-	// public static BufferedImage HALTER_SHOOT_OR_HAND_WHITE_EN = Game.spritesheet.getSprite(96, 80, 16, 16);
+	// public static BufferedImage HALTER_EN = Game.spritesheet.getSprite(0, 64,
+	// 16,16);
+	// public static BufferedImage HALTER_AMMO_EN = Game.spritesheet.getSprite(0,80,
+	// 16, 16);
+	// public static BufferedImage HALTER_SHOOT_OR_HAND_EN
+	// =Game.spritesheet.getSprite(96, 64, 16, 16);
+	// public static BufferedImage HALTER_SHOOT_OR_HAND_WHITE_EN =
+	// Game.spritesheet.getSprite(96, 80, 16, 16);
 
 	// Posições e tamanho das entidades
 	protected double x;
@@ -144,6 +148,11 @@ public class Entity {
 
 	public void tick() {
 
+	}
+
+	// Calcula distancia euclidiana
+	public double calculateDistanced(int x1, int x2, int y1, int y2) {
+		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
 
 	// Verifica colisão entre entidades

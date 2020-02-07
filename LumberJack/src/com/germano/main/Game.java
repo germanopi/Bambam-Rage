@@ -1,12 +1,10 @@
 package com.germano.main;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,12 +12,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.germano.entities.Enemy;
@@ -35,15 +35,22 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	/************ Atributos ************/
 
+	// Verifica se o jogo está sendo executado
 	private boolean isRunning = true;
 
 	// Verifica se possui um save pronto para ser carregado
 	public boolean saveGame = false;
 
-	// Tamanho da tela
+	// Gerencia de tela
 	public static final int WIDTH = 400;
 	public static int HEIGHT = 320;
 	public static final int SCALE = 3;
+	private BufferedImage image;
+	public int[] pixels;
+	public int xx;
+	public int yy;
+	public BufferedImage lightmap;
+	public int[] lightMapPixels;
 
 	// Leveis do jogo
 	private int currentLevel = 1;
@@ -61,10 +68,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static UI ui;
 	public static String gameState = "MENU";
 	public static String dificult = "EASY";
-
 	public Menu menu;
 	private Thread thread;
-	private BufferedImage image;
 
 	// Gerencia a fonte
 	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelfont.ttf");
@@ -104,6 +109,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		// Inicializa os Objetos
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		try {
+			lightmap = ImageIO.read(getClass().getResource("/lightmap.png"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		lightMapPixels = new int[lightmap.getWidth() * lightmap.getHeight()];
+		lightmap.getRGB(0, 0, lightmap.getWidth(), lightmap.getHeight(), lightMapPixels, 0, lightmap.getWidth());
+		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		shoot = new ArrayList<Shoot>();
@@ -226,6 +239,33 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	}
 
+	// Desenha retangulo manipulando pixels
+	public void drawRectangle(int xoff, int yoff) {
+		for (int xx = 0; xx < 32; xx++) {
+			for (int yy = 0; yy < 32; yy++) {
+				int xOff = xx + xoff;
+				int yOff = yy + yoff;
+				if (xOff < 0 || yOff < 0 || xOff >= WIDTH || yOff >= HEIGHT) {
+					continue;
+				}
+				pixels[xOff + (yOff * WIDTH)] = 0xff0000;
+			}
+		}
+	}
+
+	// Aplica efeito de luz
+	public void applyLight() {
+		for (int xx = 0; xx < Game.WIDTH; xx++) {
+			for (int yy = 0; yy < Game.HEIGHT; yy++) {
+				if (lightMapPixels[xx + (yy * Game.WIDTH)] == 0xffffffff) {
+					pixels[xx + (yy * Game.WIDTH)] = 0;
+				} else {
+					continue;
+				}
+			}
+		}
+	}
+
 	/************************************/
 
 	/************ Renderização ************/
@@ -251,6 +291,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			e.render(g);
 		}
 
+		// Aplica efeito de luz
+		//applyLight();
+
 		// Renderiza as balas
 		for (int i = 0; i < shoot.size(); i++) {
 			shoot.get(i).render(g);
@@ -258,6 +301,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		// Renderiza a interface
 		ui.render(g);
+
+		// Desenha retangulo manipulando pixels
+		// drawRectangle(xx, yy);
 
 		// Renderiza na tela
 		g = bs.getDrawGraphics();
