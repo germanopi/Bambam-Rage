@@ -36,7 +36,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	/************ Atributos ************/
 
-	// Verifica se
+	// Verifica
 	private boolean isRunning = true; // O jogo está sendo executado
 	public boolean saveGame = false; // Há um save pronto para ser carregado
 	public static boolean reiniciado = false; // Necessidade recomeçar jogo após morrer
@@ -66,7 +66,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static World world;
 	public static Random rand;
 	public static UI ui;
-	public static String gameState;
+	public static String gameState = "MENU";
 	public static String dificult = "EASY";
 	public Menu menu;
 	private Thread thread;
@@ -85,6 +85,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Gerencia do mouse
 	public static int mouse_x;
 	public static int mouse_y;
+
+	// Gerencia MiniMapa
+	public static BufferedImage minimapa;
+	public static int[] minimapaPixels;
 
 	/************ Construtor ************/
 
@@ -119,10 +123,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
 		entities.add(player);
 		world = new World("/level1.png");
+		minimapa = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		minimapaPixels = ((DataBufferInt) minimapa.getRaster().getDataBuffer()).getData();
 		rand = new Random();
 		ui = new UI();
 		menu = new Menu();
-		Game.gameState = "MENU";
+
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(16f);
 		} catch (FontFormatException e) {
@@ -292,6 +298,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 
 		// UI.rotacionaRetangulo(g); // Cria retangulo que rotaciona pelo mouse
+		
+		World.renderMiniMap(); // Renderiza o minimapa
+		g.drawImage(minimapa, 45, 100, World.WIDTH * 5, World.HEIGHT * 5, null); // Desenha o minimapa
 
 		g.dispose();// Limpa dados das imagens utilizadas antes
 		bs.show();// Exibe toda renderização

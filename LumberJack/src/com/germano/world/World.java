@@ -139,6 +139,29 @@ public class World {
 		}
 	}
 
+	public static void renderMiniMap() { // Renderiza o minimapa
+		for (int i = 0; i < Game.minimapaPixels.length; i++) {
+			Game.minimapaPixels[i] = 0;
+		}
+		for (int xx = 0; xx < World.WIDTH; xx++) {
+			for (int yy = 0; yy < World.HEIGHT; yy++) {
+				if (tiles[xx + (yy * WIDTH)] instanceof WallTile) {
+					Game.minimapaPixels[xx + (yy * WIDTH)] = 0xff0000;
+				}
+			}
+		}
+		int xPlayer = Game.player.getX() / 16;
+		int yPlayer = Game.player.getY() / 16;
+
+		Game.minimapaPixels[xPlayer + (yPlayer * WIDTH)] = 0x0000ff;
+
+		for (int i = 0; i < Game.enemies.size(); i++) {
+			int xEnemy= Game.enemies.get(i).getX()/16;
+			int yEnemy= Game.enemies.get(i).getY()/16;
+			Game.minimapaPixels[xEnemy + (yEnemy * WIDTH)] = 0x00ff00;
+		}
+	}
+
 	/************************************/
 
 }
