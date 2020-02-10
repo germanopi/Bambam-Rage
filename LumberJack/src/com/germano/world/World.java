@@ -74,6 +74,48 @@ public class World {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//	 	Gerar Mapa Randomicamente, Apaga tudo do construtor, comenta em Enemy quando enemies.size()==0 
+//			Game.player.setX(0);
+//			Game.player.setY(0);
+//			WIDTH = 25;
+//			HEIGHT = 25;
+//			tiles = new Tile[25 + (WIDTH * HEIGHT)]; 
+
+//			for (int xx = 0; xx < WIDTH; xx++) { // Enche o mundo com parede
+//				for (int yy = 0; yy < HEIGHT; yy++) {
+//					tiles[xx + yy * WIDTH] = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
+//				}
+//			}
+
+//			int dir = 0;
+//			int xx = 0;
+//			int yy = 0;
+
+//			for (int i = 0; i < 650; i++) {
+//				tiles[xx + yy * WIDTH] = new FloorTile(xx * 16, yy * 16, Tile.TILE_FLOOR); // Preenche com chão
+//				if (dir == 0) {// direita
+//					if (xx < WIDTH) {
+//						xx++;
+//					}
+//				} else if (dir == 1) {// esquerda
+//					if (xx > 0) {
+//						xx--;
+//					}
+//				} else if (dir == 2) {// baixo
+//					if (yy < HEIGHT) {
+//						yy++;
+//					}
+//				} else if (dir == 3) {// cima
+//					if (yy > 0) {
+//						yy--;
+//					}
+//				}
+
+//				if (Game.rand.nextInt(100) < 30) { // Troca de direção
+//					dir = Game.rand.nextInt(4);
+//				}
+//			}
+//		}
 	}
 
 	/************ Lógica ************/
@@ -156,8 +198,8 @@ public class World {
 		Game.minimapaPixels[xPlayer + (yPlayer * WIDTH)] = 0x0000ff;
 
 		for (int i = 0; i < Game.enemies.size(); i++) {
-			int xEnemy= Game.enemies.get(i).getX()/16;
-			int yEnemy= Game.enemies.get(i).getY()/16;
+			int xEnemy = Game.enemies.get(i).getX() / 16;
+			int yEnemy = Game.enemies.get(i).getY() / 16;
 			Game.minimapaPixels[xEnemy + (yEnemy * WIDTH)] = 0x00ff00;
 		}
 	}
