@@ -16,6 +16,7 @@ import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -38,7 +39,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	// Verifica se
 	private boolean isRunning = true; // O jogo está sendo executado
 	public boolean saveGame = false; // Há um save pronto para ser carregado
-	public boolean reiniciado = false; // Necessidade recomeçar jogo após morrer
+	public static boolean reiniciado = false; // Necessidade recomeçar jogo após morrer
 
 	// Gerencia de tela
 	public static final int WIDTH = 400;
@@ -176,11 +177,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				Menu.saveGame(opt1, opt2, 10);
 				System.out.println("Jogo Salvo");
 			}
+
+			Collections.sort(entities, Entity.nodeSorter); // Ordena as entidades pela depth
+
 			for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
 				Entity e = entities.get(i);
 				e.tick();
 			}
-			for (int i = 0; i < shoot.size(); i++) { // Carrega os tiros
+			for (int i = 0; i < shoot.size(); i++) { // Atualiza os tiros
 				shoot.get(i).tick();
 			}
 			if (enemies.size() == 0) {// Verifica se pode passar de level
@@ -207,11 +211,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				String newWorld = "level" + currentLevel + ".png";
 				World.restartGame(newWorld);
 			}
-			player.updateCamera();
-		}
-		menu.tick();
+			player.updateCamera(); // Centraliza a camera
 
-		for (int i = 0; i < walls.size(); i++) {
+		}
+
+		menu.tick(); // Atualiza o menu
+
+		for (int i = 0; i < walls.size(); i++) {// Atualiza as paredes
 			walls.get(i).tick();
 		}
 

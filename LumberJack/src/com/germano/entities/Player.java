@@ -110,6 +110,7 @@ public class Player extends Entity {
 
 		}
 
+		depth = 1;
 		moved = false; // Movimentação
 		if (right && World.isFree((int) (x + speed), this.getY(), jumpCurrent)) {
 			moved = true;

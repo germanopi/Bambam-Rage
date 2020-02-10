@@ -58,6 +58,7 @@ public class Enemy extends Entity {
 	/************ Lógica ************/
 
 	public void tick() {
+		depth = 0;
 		if (!isCollidingPlayer()) { // Se não estiver colidindo com o player
 			if (path == null || path.size() == 0) {
 				Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
@@ -89,13 +90,13 @@ public class Enemy extends Entity {
 		if (new Random().nextInt(100) < 100) { // Diminuir velocidade dos inimigos
 			followPath(path);
 		}
-		
+
 		if (new Random().nextInt(100) < 20) { // Atualiza o caminho Inimigo -> Player
 			Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
 			Vector2i end = new Vector2i((int) (Game.player.x / 16), (int) (Game.player.y / 16));
 			this.path = AStar.findPath(Game.world, start, end);
 		}
-		
+
 		frames++;
 		if (frames == maxFrames) { // Muda sprite da animação dos inimigos
 			frames = 0;

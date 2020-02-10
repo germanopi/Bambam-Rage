@@ -1,3 +1,4 @@
+
 package com.germano.main;
 
 import java.awt.Color;
@@ -25,14 +26,13 @@ public class Menu {
 	public boolean enter;
 	public boolean sair;
 	public boolean escape;
+	public boolean pausado = false;
 	public String[] options = { "Novo Jogo", "Carregar Jogo", "Sair" };
 	public int currentOption = 0;
 	public int maxOptionsMenu = options.length - 1;
 	public String[] difficult = { "EASY", "MEDIUM", "HARD" };
 	public int currentDific = 0;
 	public int maxDific = difficult.length - 1;
-
-	public boolean pausado = false;
 
 	// Gerencia de save
 	public static boolean saveExists = false;
@@ -41,7 +41,6 @@ public class Menu {
 	/************ Lógica ************/
 
 	public void tick() {
-		System.out.println(Game.gameState);
 		File file = new File("save.txt");
 		if (file.exists()) {
 			saveExists = true;
@@ -88,24 +87,19 @@ public class Menu {
 					Game.gameState = "DIFICULDADE";
 					file = new File("save.txt");
 					file.delete();
-					System.out.println("1");
 				}
-			}
-			else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("EASY")) {
+			} else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("EASY")) {
 				Game.dificult = "EASY";
 				Game.gameState = "JOGANDO";
-				System.out.println("3");
 			} else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("MEDIUM")) {
 				Game.dificult = "MEDIUM";
 				Game.gameState = "JOGANDO";
-				System.out.println("4");
 			} else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("HARD")) {
 				Game.dificult = "HARD";
 				Game.gameState = "JOGANDO";
-				System.out.println("5");
 			}
 			if (Game.gameState.equals("MENU") && options[currentOption].equals("Carregar Jogo")) {
-				Game.gameState="JOGANDO";
+				Game.gameState = "JOGANDO";
 				file = new File("save.txt");
 				if (file.exists()) {
 					String saver = loadGame(10);
@@ -117,6 +111,9 @@ public class Menu {
 			}
 			if (Game.gameState.contentEquals("GAME OVER")) {
 				Game.gameState = "MENU";
+				Game.reiniciado = true;
+				Game.player.life = 100;
+				pausado = false;
 			}
 		}
 

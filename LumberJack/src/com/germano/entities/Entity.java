@@ -3,6 +3,7 @@ package com.germano.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.List;
 
 import com.germano.main.Game;
@@ -44,6 +45,7 @@ public class Entity {
 
 	private BufferedImage sprite;
 	protected List<Node> path;
+	public int depth; // Profundidade de render
 
 	/************************************/
 
@@ -189,6 +191,19 @@ public class Entity {
 			return false;
 		}
 	}
+
+	public static Comparator<Entity> nodeSorter = new Comparator<Entity>() { // Compara depth de render das entidades
+		@Override
+		public int compare(Entity e1, Entity e2) {
+			if (e2.depth < e1.depth) {
+				return +1;
+			}
+			if (e2.depth > e1.depth) {
+				return -1;
+			}
+			return 0;
+		}
+	};
 
 	/************ Renderização ************/
 
