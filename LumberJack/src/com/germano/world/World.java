@@ -74,7 +74,7 @@ public class World {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//	 	Gerar Mapa Randomicamente, Apaga tudo do construtor, comenta em Enemy quando enemies.size()==0 
+//	 	Gerar Mapa Randomicamente, Apaga tudo do construtor, E comenta em Enemy onde enemies.size()==0 
 //			Game.player.setX(0);
 //			Game.player.setY(0);
 //			WIDTH = 25;

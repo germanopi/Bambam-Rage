@@ -1,10 +1,14 @@
 package com.germano.main;
 
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -146,6 +150,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		frame.add(this); // Adiciona o canvas na janela
 		frame.setResizable(false);// Não permite redimencionar a janela
 		frame.pack();// Calcula as dimensões da janela
+		Image imageIcon = null; // Objeto do tipo imagem
+		try {
+			imageIcon = ImageIO.read(getClass().getResource("/icon.png"));// Lê onde está o icone
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Toolkit toolkit = Toolkit.getDefaultToolkit(); // Objeto do tipo toolkit
+		Image imageCursor = toolkit.getImage(getClass().getResource("/icon.png"));
+		Cursor c = toolkit.createCustomCursor(imageCursor, new Point(0, 0), "img");
+		frame.setCursor(c); // troca o icone pelo customizado
+		frame.setIconImage(imageIcon); // troca o icone pelo customizado
+		frame.setAlwaysOnTop(true);
 		frame.setLocationRelativeTo(null);// Localiza a janela, null está no centro
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Fecha a janela ao clicar em fechar.
 		frame.setVisible(true);// Permite ver a janela
@@ -298,7 +314,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 
 		// UI.rotacionaRetangulo(g); // Cria retangulo que rotaciona pelo mouse
-		
+
 		World.renderMiniMap(); // Renderiza o minimapa
 		g.drawImage(minimapa, 45, 100, World.WIDTH * 5, World.HEIGHT * 5, null); // Desenha o minimapa
 
