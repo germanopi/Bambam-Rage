@@ -21,7 +21,7 @@ public class UI {
 	}
 
 	public static void telaGameOver(Graphics g) {// Cria a tela de Game Over
-		if (Game.gameState.equals("GAME_OVER")) {
+		if (Game.gameState.equals("GAME OVER")) {
 			// adiciona opacidade
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(new Color(0, 0, 0, 100));

@@ -65,7 +65,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static World world;
 	public static Random rand;
 	public static UI ui;
-	public static String gameState = "MENU";
+	public static String gameState;
 	public static String dificult = "EASY";
 	public Menu menu;
 	private Thread thread;
@@ -121,6 +121,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		rand = new Random();
 		ui = new UI();
 		menu = new Menu();
+		Game.gameState = "MENU";
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(16f);
 		} catch (FontFormatException e) {
@@ -166,7 +167,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	/************ Lógica ************/
 
 	public void tick() {
-		if (gameState.equals("NORMAL")) {
+		if (gameState.equals("JOGANDO")) {
 			if (this.saveGame) { // Salva o jogo
 				this.saveGame = false;
 				String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
@@ -190,7 +191,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				String newWorld = "level" + currentLevel + ".png";
 				World.restartGame(newWorld);
 			}
-		} else if (gameState.equals("GAME_OVER")) { // Animação do Enter ao morrer
+		} else if (gameState.equals("GAME OVER")) { // Animação do Enter ao morrer
 			this.framesGameOver++;
 			if (this.framesGameOver == 30) {
 				this.framesGameOver = 0;
@@ -207,8 +208,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				World.restartGame(newWorld);
 			}
 			player.updateCamera();
-			menu.tick();
 		}
+		menu.tick();
 
 		for (int i = 0; i < walls.size(); i++) {
 			walls.get(i).tick();
@@ -276,9 +277,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 
-		if (gameState.equals("GAME_OVER")) { // Cria tela GameOver
+		if (gameState.equals("GAME OVER")) { // Cria tela GameOver
 			UI.telaGameOver(g);
 		} else if (gameState.equals("MENU")) {// Cria tela Menu
+			menu.render(g);
+		} else if (gameState.equals("DIFICULDADE")) {// Cria tela Menu
 			menu.render(g);
 		}
 
@@ -329,37 +332,33 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			player.left = true;
 		}
-
 		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			player.up = true;
-			if (gameState.equals("MENU")) {
+			if (Game.gameState.equals("MENU") || Game.gameState.equals("DIFICULDADE")) {
 				menu.up = true;
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.down = true;
-			if (gameState.equals("MENU")) {
+			if (Game.gameState.equals("MENU") || Game.gameState.equals("DIFICULDADE")) {
 				menu.down = true;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			if (gameState == "NORMAL") {
+			if (gameState.equals("JOGANDO")) {
 				this.saveGame = true;
 			}
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {// Ativado se a tecla foi solta
+	public void keyReleased(KeyEvent e) { // Ativado se a tecla foi solta
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			player.right = false;
-
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			player.left = false;
 		}
-
 		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			player.up = false;
-
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.down = false;
 		}
@@ -369,25 +368,28 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.jump = true;
 		}
+//////////////////////////////////////////////////////////////////
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (gameState.equals("MENU")) {
+			if (Game.gameState.equals("MENU")) {
 				menu.enter = true;
 			}
-			if (gameState.equals("GAME_OVER")) {
-				gameState = "MENU";
-				Game.pontos = 0;
-				reiniciado = true;
+			if (Game.gameState.equals("GAME OVER")) {
+				menu.enter = true;
+			}
+			if (Game.gameState.equals("DIFICULDADE")) {
+				menu.enter = true;
 			}
 		}
+
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			if (gameState.equals("MENU")) {
-			} else if (gameState.equals("GAME_OVER")) {
-			} else {
-				gameState = "MENU";
-				menu.pause = true;
-				menu.isMenu = true;
+			if (Game.gameState.equals("DIFICULDADE")) {
+				menu.escape = true;
+			}
+			if (Game.gameState.equals("JOGANDO")) {
+				menu.escape = true;
 			}
 		}
+//////////////////////////////////////////////////////////////////
 	}
 
 	@Override

@@ -19,26 +19,20 @@ public class Menu {
 
 	/************ Atributos ************/
 
-	// Controle da tela de menu
-	public boolean isMenu = true;
-	public String[] options = { "Novo Jogo", "Carregar Jogo", "Sair" };
-	public int currentOption = 0;
-	public int maxOptionsMenu = options.length - 1;
-
-	// Controle da tela de dificuldade
-	public boolean isDific = false;
-	public String[] difficult = { "EASY", "MEDIUM", "HARD" };
-	public int currentDific = 0;
-	public int maxDific = difficult.length - 1;
-
+	// Controle da tela
 	public boolean up;
 	public boolean down;
 	public boolean enter;
 	public boolean sair;
+	public boolean escape;
+	public String[] options = { "Novo Jogo", "Carregar Jogo", "Sair" };
+	public int currentOption = 0;
+	public int maxOptionsMenu = options.length - 1;
+	public String[] difficult = { "EASY", "MEDIUM", "HARD" };
+	public int currentDific = 0;
+	public int maxDific = difficult.length - 1;
 
-	// Verifica se o jogo foi pausado no meio
-	public static boolean pause = false;
-	public boolean notStarted = false;
+	public boolean pausado = false;
 
 	// Gerencia de save
 	public static boolean saveExists = false;
@@ -47,7 +41,7 @@ public class Menu {
 	/************ Lógica ************/
 
 	public void tick() {
-
+		System.out.println(Game.gameState);
 		File file = new File("save.txt");
 		if (file.exists()) {
 			saveExists = true;
@@ -57,12 +51,12 @@ public class Menu {
 
 		if (up) {
 			up = false;
-			if (isMenu) {
+			if (Game.gameState.equals("MENU")) {
 				currentOption--;
 				if (currentOption < 0) {
 					currentOption = maxOptionsMenu;
 				}
-			} else if (isDific) {
+			} else if (Game.gameState.equals("DIFICULDADE")) {
 				currentDific--;
 				if (currentDific < 0) {
 					currentDific = maxDific;
@@ -72,12 +66,12 @@ public class Menu {
 
 		if (down) {
 			down = false;
-			if (isMenu) {
+			if (Game.gameState.equals("MENU")) {
 				currentOption++;
 				if (currentOption > maxOptionsMenu) {
 					currentOption = 0;
 				}
-			} else if (isDific) {
+			} else if (Game.gameState.equals("DIFICULDADE")) {
 				currentDific++;
 				if (currentDific > maxDific) {
 					currentDific = 0;
@@ -87,44 +81,52 @@ public class Menu {
 
 		if (enter) {
 			enter = false;
-			if (isMenu && options[currentOption].equals("Novo Jogo")) { // Se escolher Novo Jogo
-				if (pause) {// Se vier ao menu apertando esc
-					isDific = false;
-					Game.gameState = "NORMAL";
-					pause = false;
-				} else {// Se vier do menu principal
-					isDific = true;
-					isMenu = false;
+			if (Game.gameState.equals("MENU") && options[currentOption].equals("Novo Jogo")) { // Se escolher Novo Jogo
+				if (pausado == true) {
+					Game.gameState = "JOGANDO";
+				} else {
+					Game.gameState = "DIFICULDADE";
 					file = new File("save.txt");
 					file.delete();
+					System.out.println("1");
 				}
-			} else if (isDific && difficult[currentDific].contentEquals("EASY")) {
+			}
+			else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("EASY")) {
 				Game.dificult = "EASY";
-				Game.gameState = "NORMAL";
-				isDific = false;
-				isMenu = false;
-				pause = false;
-			} else if (isDific && difficult[currentDific].contentEquals("MEDIUM")) {
+				Game.gameState = "JOGANDO";
+				System.out.println("3");
+			} else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("MEDIUM")) {
 				Game.dificult = "MEDIUM";
-				Game.gameState = "NORMAL";
-				isDific = false;
-				isMenu = false;
-				pause = false;
-			} else if (difficult[currentDific].contentEquals("HARD")) {
+				Game.gameState = "JOGANDO";
+				System.out.println("4");
+			} else if (Game.gameState.equals("DIFICULDADE") && difficult[currentDific].contentEquals("HARD")) {
 				Game.dificult = "HARD";
-				Game.gameState = "NORMAL";
-				isDific = false;
-				isMenu = false;
-				pause = false;
-			} else if (options[currentOption].equals("Carregar Jogo")) {
+				Game.gameState = "JOGANDO";
+				System.out.println("5");
+			}
+			if (Game.gameState.equals("MENU") && options[currentOption].equals("Carregar Jogo")) {
+				Game.gameState="JOGANDO";
 				file = new File("save.txt");
 				if (file.exists()) {
 					String saver = loadGame(10);
 					applySave(saver);
 				}
 			}
-			if (options[currentOption].equals("Sair")) {
+			if (Game.gameState.equals("MENU") && options[currentOption].equals("Sair")) {
 				System.exit(1);
+			}
+			if (Game.gameState.contentEquals("GAME OVER")) {
+				Game.gameState = "MENU";
+			}
+		}
+
+		if (escape) {
+			escape = false;
+			if (Game.gameState.equals("DIFICULDADE")) {
+				Game.gameState = "MENU";
+			} else if (Game.gameState.equals("JOGANDO")) {
+				Game.gameState = "MENU";
+				pausado = true;
 			}
 		}
 	}
@@ -136,7 +138,7 @@ public class Menu {
 			switch (spl2[0]) {
 			case "level":
 				World.restartGame("level" + spl2[1] + ".png");
-				Game.gameState = "NORMAL";
+				Game.gameState = "JOGANDO";
 				break;
 			case "vida":
 				Game.player.life = Integer.parseInt(spl2[1]);
@@ -235,12 +237,11 @@ public class Menu {
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 36));
 
-		// Cria as opções do menu
-		if (!isDific) { // Se não estiver escolhendo dificuldade
-			if (pause == false) {// Se o jogo não foi pausado 
+		if (Game.gameState.equals("MENU")) { // Cria as opções do menu
+			if (pausado == false) {// Se o jogo não foi pausado
 				g.drawString("Novo Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
-			} else {// Se o jogo foi pausado 
+			} else {// Se o jogo foi pausado
 				g.drawString("Continuar", ((Game.WIDTH * Game.SCALE) / 2) - 150,
 						((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			}
@@ -256,8 +257,8 @@ public class Menu {
 			} else if (options[currentOption].equals("Sair")) {
 				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
 			}
-		} else if (isDific) {// Se estiver escolhendo dificuldades
-			// Cria as opções de dificuldade
+		}
+		if (Game.gameState.equals("DIFICULDADE")) { // Cria as opções de dificuldade
 			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
 			g.drawString("Medium", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 200);
 			g.drawString("Hard", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
