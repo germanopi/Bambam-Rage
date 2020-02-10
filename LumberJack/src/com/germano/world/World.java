@@ -13,6 +13,7 @@ import com.germano.entities.Enemy;
 import com.germano.entities.Entity;
 import com.germano.entities.Heart;
 import com.germano.entities.Player;
+import com.germano.entities.Shoot;
 import com.germano.entities.Weapon;
 import com.germano.graficos.Spritesheet;
 import com.germano.main.Game;
@@ -104,6 +105,7 @@ public class World {
 	}
 
 	public static void restartGame(String level) {// Recomeça o jogo
+		Game.shoot = new ArrayList<Shoot>();
 		Game.walls = new ArrayList<WallTile>();
 		Game.entities = new ArrayList<Entity>();
 		Game.enemies = new ArrayList<Enemy>();

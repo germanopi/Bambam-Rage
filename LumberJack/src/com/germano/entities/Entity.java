@@ -1,6 +1,5 @@
 package com.germano.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -142,6 +141,27 @@ public class Entity {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
 
+	public void followPath(List<Node> path) {// Segue o caminho calculado
+		if (path != null) { // Encontrou um caminho
+			if (path.size() > 0) { // Ainda tem caminho pra ir
+				Vector2i target = path.get(path.size() - 1).tile;
+				if (x < target.x * 16 && !isCollidingEnemy(this.getX() + 1, this.getY())) {
+					x++;
+				} else if (x > target.x * 16 && !isCollidingEnemy(this.getX() - 1, this.getY())) {
+					x--;
+				}
+				if (y < target.y * 16 && !isCollidingEnemy(this.getX(), this.getY() + 1)) {
+					y++;
+				} else if (y > target.y * 16 && !isCollidingEnemy(this.getX(), this.getY() - 1)) {
+					y--;
+				}
+				if (x == target.x * 16 && y == target.y * 16) {
+					path.remove(path.size() - 1);
+				}
+			}
+		}
+	}
+
 	public boolean isCollidingEnemy(int xNext, int yNext) { // Colisão entre inimigos
 		Rectangle enemyCurrent = new Rectangle(xNext + maskX, yNext + maskY, maskWidth, maskHeight);
 		for (int i = 0; i < Game.enemies.size(); i++) {
@@ -155,27 +175,6 @@ public class Entity {
 			}
 		}
 		return false;
-	}
-
-	public void followPath(List<Node> path) {// Segue o caminho calculado
-		if (path != null) { // Encontrou um caminho
-			if (path.size() > 0) { // Ainda tem caminho pra ir
-				Vector2i target = path.get(path.size() - 1).tile;
-				if (x < target.x * 16) {
-					x++;
-				} else if (x > target.x * 16) {
-					x--;
-				}
-				if (y < target.y * 16) {
-					y++;
-				} else if (y > target.y * 16) {
-					y--;
-				}
-				if (x == target.x * 16 && y == target.y * 16) { // Pode procurar outro caminho
-					path.remove(path.size() - 1);
-				}
-			}
-		}
 	}
 
 	public static boolean isColliding(Entity e1, Entity e2) {// Verifica colisão entre entidades

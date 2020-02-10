@@ -30,8 +30,9 @@
 - Diminuida a dificuldade ( IMPLEMENTADO )
 - Mudando tema para LumberJack ( IMPLEMENTADO )
 - Correção Esc no Menu ( IMPLEMENTADO )
-- Consertar criptografia de save, adicionar munição, pontos e posição (IMPLEMENTADO)
-- Melhorar Comentarios ( Feito )
-- remover sprites inuteis ( Feito )
-- Evitar colisão entre inimigos
+- Consertar criptografia de save, adicionar munição, pontos e posição ( IMPLEMENTADO )
+- Melhorar Comentarios ( IMPLEMENTADO )
+- remover sprites inuteis ( IMPLEMENTADO )
+- Evitar colisão entre inimigos ( IMPLEMENTADO )
+- Corrigir Bug Menu
  

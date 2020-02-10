@@ -1,25 +1,19 @@
 package com.germano.entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import com.germano.main.Game;
 import com.germano.main.Sound;
 import com.germano.world.AStar;
 import com.germano.world.Camera;
 import com.germano.world.Vector2i;
-import com.germano.world.WallTile;
-import com.germano.world.World;
 
 public class Enemy extends Entity {
 
 	/************ Atributos ************/
-
-	// Movimentação
-	private boolean moved = false;
-	private double speed = 1;
 
 	// Direção
 	public int right_dir = 0;
@@ -64,15 +58,44 @@ public class Enemy extends Entity {
 	/************ Lógica ************/
 
 	public void tick() {
-
-		if (path == null || path.size() == 0) { // Calcula o caminho Inimigo->Player
-			Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
-			Vector2i end = new Vector2i((int) (Game.player.x / 16), (int) (Game.player.y / 16));
-			path = AStar.findPath(Game.world, start, end);
+		if (!isCollidingPlayer()) { // Se não estiver colidindo com o player
+			if (path == null || path.size() == 0) {
+				Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
+				Vector2i end = new Vector2i((int) (Game.player.x / 16), (int) (Game.player.y / 16));
+				this.path = AStar.findPath(Game.world, start, end);
+			}
+		} else { // Se estiver colidindo com o player
+			if (Game.dificult.equals("EASY")) {
+				if (new Random().nextInt(100) < 10) {
+					Sound.playerHurt.play();
+					Game.player.life -= Game.rand.nextInt(3);
+					Game.player.isDamaged = true;
+				}
+			} else if (Game.dificult.equals("MEDIUM")) {
+				if (new Random().nextInt(100) < 25) {
+					Sound.playerHurt.play();
+					Game.player.life -= Game.rand.nextInt(3);
+					Game.player.isDamaged = true;
+				}
+			} else if (Game.dificult.equals("HARD")) {
+				if (new Random().nextInt(100) < 50) {
+					Sound.playerHurt.play();
+					Game.player.life -= Game.rand.nextInt(3);
+					Game.player.isDamaged = true;
+				}
+			}
 		}
 
-		followPath(path);
-
+		if (new Random().nextInt(100) < 100) { // Diminuir velocidade dos inimigos
+			followPath(path);
+		}
+		
+		if (new Random().nextInt(100) < 20) { // Atualiza o caminho Inimigo -> Player
+			Vector2i start = new Vector2i((int) (x / 16), (int) (y / 16));
+			Vector2i end = new Vector2i((int) (Game.player.x / 16), (int) (Game.player.y / 16));
+			this.path = AStar.findPath(Game.world, start, end);
+		}
+		
 		frames++;
 		if (frames == maxFrames) { // Muda sprite da animação dos inimigos
 			frames = 0;
