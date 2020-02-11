@@ -105,6 +105,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public int x2 = 100;
 	public int y2 = 100;
 
+	// Cutscene
+	public static int entrada = 1;
+	public static int jogando = 2;
+	public static int estado_cena = entrada;
+	public int timeCena = 0;
+	public int maxtimeCena = 40;
+
 	/************ Construtor ************/
 
 	public Game() {
@@ -218,6 +225,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public void tick() {
 		if (gameState.equals("JOGANDO")) {
+
+			// if (Game.estado_cena == Game.entrada) { // Faz Cutscene de entrada
+			// timeCena++;
+			// Game.player.setY(Game.player.getY() - 1);
+			// if (timeCena == this.maxtimeCena) {
+			// Game.estado_cena = jogando;
+			// }
+			// }
+
 			if (this.saveGame) { // Salva o jogo
 				this.saveGame = false;
 				String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
@@ -227,8 +243,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				System.out.println("Jogo Salvo");
 			}
 
-			Collections.sort(entities, Entity.nodeSorter); // Ordena as entidades pela depth
-
 			for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
 				Entity e = entities.get(i);
 				e.tick();
@@ -236,6 +250,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			for (int i = 0; i < shoot.size(); i++) { // Atualiza os tiros
 				shoot.get(i).tick();
 			}
+
+			Collections.sort(entities, Entity.nodeSorter); // Ordena as entidades pela depth
+
 			if (enemies.size() == 0) {// Verifica se pode passar de level
 				currentLevel++;
 				if (currentLevel > maxLevel) {
