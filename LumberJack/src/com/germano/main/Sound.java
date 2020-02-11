@@ -1,48 +1,73 @@
 package com.germano.main;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
+import java.io.*;
+import javax.sound.sampled.*;
 
 public class Sound {
-	/************ Atributos ************/
 
-	private AudioClip clip;
-	public static final Sound musicBackground = new Sound("/Background.wav");
-	public static final Sound woodHurt = new Sound("/WoodHurt.wav");
-	public static final Sound playerHurt = new Sound("/PlayerHurt.wav");
+	public static class Clips {
+		public Clip[] clips;
+		private int p;
+		private int count;
 
-	/************ Lógica ************/
+		public Clips(byte[] buffer, int count)
+				throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+			if (buffer == null) {
+				return;
+			}
+			clips = new Clip[count];
+			this.count = count;
 
-	private Sound(String name) {
-		try {
-			clip = Applet.newAudioClip(Sound.class.getResource(name));
-		} catch (Throwable e) {
+			for (int i = 0; i < count; i++) {
+				clips[i] = AudioSystem.getClip();
+				clips[i].open(AudioSystem.getAudioInputStream(new ByteArrayInputStream(buffer)));
+			}
+		}
 
+		public void play() {
+			if (clips == null) {
+				return;
+			}
+			clips[p].stop();
+			clips[p].setFramePosition(0);
+			clips[p].start();
+			p++;
+			if (p >= count) {
+				p = 0;
+			}
+		}
+
+		public void loop() {
+			if (clips == null) {
+				return;
+			}
+			clips[p].loop(300);
 		}
 	}
 
-	public void play() {// Executa o som uma vez
+	public static Clips background = load("/Background.wav", 1);
+	public static Clips playerHurt = load("/PlayerHurt.wav", 1);
+	public static Clips woodHurt = load("/WoodHurt.wav", 1);
+
+	private static Clips load(String name, int count) {
 		try {
-			new Thread() {
-				public void run() {
-					clip.play();
-				}
-			}.start();
-		} catch (Throwable e) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			DataInputStream dis = new DataInputStream(Sound.class.getResourceAsStream(name));
+
+			byte[] buffer = new byte[1024];
+			int read = 0;
+			while ((read = dis.read(buffer)) >= 0) {
+				baos.write(buffer, 0, read);
+			}
+			dis.close();
+			byte[] data = baos.toByteArray();
+			return new Clips(data, count);
+		} catch (Exception e) {
+			try {
+				return new Clips(null, 0);
+			} catch (Exception ee) {
+				return null;
+			}
 		}
 	}
-
-	public void loop() {// Executa o som repetidamente
-		try {
-			new Thread() {
-				public void run() {
-					clip.loop();
-				}
-			}.start();
-		} catch (Throwable e) {
-		}
-	}
-
-	/***********************************/
-
 }

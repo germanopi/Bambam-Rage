@@ -19,6 +19,7 @@ import com.germano.graficos.Spritesheet;
 import com.germano.main.Game;
 
 public class World {
+	
 	/************ Atributos ************/
 
 	public static Tile[] tiles;

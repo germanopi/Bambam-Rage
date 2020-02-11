@@ -98,7 +98,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public Game() {
 
-		// Sound.musicBackground.loop(); // Ativa a musica de fundo
+		// s Sound.background.loop(); // Ativa a musica de fundo
 
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
@@ -106,6 +106,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		addMouseMotionListener(this);
 
 		// Seleciona o tamanho da janela
+		// setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		// FullScreen
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
 
@@ -148,6 +150,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void initFrame() {
 		frame = new JFrame("Lumber Jack");// Cria uma instancia de janela
 		frame.add(this); // Adiciona o canvas na janela
+		frame.setUndecorated(true);// Remove barra de tarefas da janela
 		frame.setResizable(false);// Não permite redimencionar a janela
 		frame.pack();// Calcula as dimensões da janela
 		Image imageIcon = null; // Objeto do tipo imagem
@@ -304,7 +307,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// Renderiza na tela
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
-
+		// g.drawImage(image, 0, 0, Toolkit.getDefaultToolkit().getScreenSize().width,
+		// Toolkit.getDefaultToolkit().getScreenSize().height, null); // Fullscreen
 		if (gameState.equals("GAME OVER")) { // Cria tela GameOver
 			UI.telaGameOver(g);
 		} else if (gameState.equals("MENU")) {// Cria tela Menu
@@ -399,7 +403,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		if (e.getKeyCode() == KeyEvent.VK_X) {
 			player.jump = true;
 		}
-//////////////////////////////////////////////////////////////////
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (Game.gameState.equals("MENU")) {
 				menu.enter = true;
@@ -420,7 +423,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				menu.escape = true;
 			}
 		}
-//////////////////////////////////////////////////////////////////
 	}
 
 	@Override
