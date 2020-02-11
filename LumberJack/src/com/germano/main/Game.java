@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 
 import com.germano.entities.Enemy;
 import com.germano.entities.Entity;
+import com.germano.entities.NPC;
 import com.germano.entities.Player;
 import com.germano.entities.Shoot;
 import com.germano.graficos.Spritesheet;
@@ -110,7 +111,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int jogando = 2;
 	public static int estado_cena = entrada;
 	public int timeCena = 0;
-	public int maxtimeCena = 40;
+	public int maxtimeCena = 21;
 
 	/************ Construtor ************/
 
@@ -153,6 +154,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		rand = new Random();
 		ui = new UI();
 		menu = new Menu();
+		NPC npc = new NPC(195, 300, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+		entities.add(npc);
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(16f);
 		} catch (FontFormatException e) {
@@ -225,41 +228,49 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public void tick() {
 		if (gameState.equals("JOGANDO")) {
+			if (Game.estado_cena == Game.entrada) { // Faz Cutscene de entrada
+				timeCena++;
+				Game.player.setY(Game.player.getY() - 1);
+				if (timeCena == this.maxtimeCena) {
+					Game.estado_cena = jogando;
 
-			// if (Game.estado_cena == Game.entrada) { // Faz Cutscene de entrada
-			// timeCena++;
-			// Game.player.setY(Game.player.getY() - 1);
-			// if (timeCena == this.maxtimeCena) {
-			// Game.estado_cena = jogando;
-			// }
-			// }
-
-			if (this.saveGame) { // Salva o jogo
-				this.saveGame = false;
-				String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
-				int[] opt2 = { this.currentLevel, (int) this.player.life, (int) player.ammo, player.getX(),
-						player.getY(), Game.pontos };
-				Menu.saveGame(opt1, opt2, 10);
-				System.out.println("Jogo Salvo");
-			}
-
-			for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
-				Entity e = entities.get(i);
-				e.tick();
-			}
-			for (int i = 0; i < shoot.size(); i++) { // Atualiza os tiros
-				shoot.get(i).tick();
-			}
-
-			Collections.sort(entities, Entity.nodeSorter); // Ordena as entidades pela depth
-
-			if (enemies.size() == 0) {// Verifica se pode passar de level
-				currentLevel++;
-				if (currentLevel > maxLevel) {
-					currentLevel = 1;
 				}
-				String newWorld = "level" + currentLevel + ".png";
-				World.restartGame(newWorld);
+				for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
+					Entity e = entities.get(i);
+					if (e instanceof NPC) {
+						e.tick();
+					}
+
+				}
+			}
+			if (NPC.firstTime == false) {
+				if (this.saveGame) { // Salva o jogo
+					this.saveGame = false;
+					String[] opt1 = { "level", "vida", "ammo", "x", "y", "pontos" };
+					int[] opt2 = { this.currentLevel, (int) this.player.life, (int) player.ammo, player.getX(),
+							player.getY(), Game.pontos };
+					Menu.saveGame(opt1, opt2, 10);
+					System.out.println("Jogo Salvo");
+				}
+
+				for (int i = 0; i < entities.size(); i++) { // Carrega as entidades
+					Entity e = entities.get(i);
+					e.tick();
+				}
+				for (int i = 0; i < shoot.size(); i++) { // Atualiza os tiros
+					shoot.get(i).tick();
+				}
+
+				Collections.sort(entities, Entity.nodeSorter); // Ordena as entidades pela depth
+
+				if (enemies.size() == 0) {// Verifica se pode passar de level
+					currentLevel++;
+					if (currentLevel > maxLevel) {
+						currentLevel = 1;
+					}
+					String newWorld = "level" + currentLevel + ".png";
+					World.restartGame(newWorld);
+				}
 			}
 		} else if (gameState.equals("GAME OVER")) { // Animação do Enter ao morrer
 			this.framesGameOver++;
@@ -481,6 +492,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.jump = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (Game.gameState.equals("JOGANDO")) {
+				if (NPC.firstTime) {
+					NPC.firstTime = false;
+				}
+			}
 			if (Game.gameState.equals("MENU")) {
 				menu.enter = true;
 			}

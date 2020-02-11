@@ -237,35 +237,35 @@ public class Menu {
 		if (Game.gameState.equals("MENU")) { // Cria as opções do menu
 			if (pausado == false) {// Se o jogo não foi pausado
 				g.drawString("Novo Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
-						((Game.HEIGHT * Game.SCALE) / 2) + 150);
+						((Game.HEIGHT * Game.SCALE) / 2) + 130);
 			} else {// Se o jogo foi pausado
 				g.drawString("Continuar", ((Game.WIDTH * Game.SCALE) / 2) - 150,
-						((Game.HEIGHT * Game.SCALE) / 2) + 150);
+						((Game.HEIGHT * Game.SCALE) / 2) + 130);
 			}
 			g.drawString("Carregar Jogo", ((Game.WIDTH * Game.SCALE) / 2) - 150,
-					((Game.HEIGHT * Game.SCALE) / 2) + 200);
-			g.drawString("Sair", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
+					((Game.HEIGHT * Game.SCALE) / 2) + 180);
+			g.drawString("Sair", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 230);
 
 			// Cria o selecionador de opções
 			if (options[currentOption].equals("Novo Jogo")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 130);
 			} else if (options[currentOption].equals("Carregar Jogo")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 200);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 180);
 			} else if (options[currentOption].equals("Sair")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 230);
 			}
 		}
 		if (Game.gameState.equals("DIFICULDADE")) { // Cria as opções de dificuldade
-			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
-			g.drawString("Medium", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 200);
-			g.drawString("Hard", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
+			g.drawString("Easy", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 130);
+			g.drawString("Medium", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 180);
+			g.drawString("Hard", ((Game.WIDTH * Game.SCALE) / 2) - 150, ((Game.HEIGHT * Game.SCALE) / 2) + 230);
 			// Cria o selecionador de dificuldade
 			if (difficult[currentDific].equals("EASY")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 150);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 130);
 			} else if (difficult[currentDific].equals("MEDIUM")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 200);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 180);
 			} else if (difficult[currentDific].equals("HARD")) {
-				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 250);
+				g.drawString(">", ((Game.WIDTH * Game.SCALE) / 2) - 180, ((Game.HEIGHT * Game.SCALE) / 2) + 230);
 			}
 		}
 	}

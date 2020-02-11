@@ -5,12 +5,24 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import com.germano.entities.NPC;
 import com.germano.entities.Player;
 import com.germano.main.Game;
 
 public class UI {
 
 	/************ Renderização ************/
+
+	public static void dialogo(String[] frases, Graphics g) { // Cria as frases do NPC
+		g.setColor(Color.black);
+		g.fillRect(108, 239, 182, 27);
+		g.setColor(Color.white);
+		g.fillRect(109, 240, 180, 25);
+		g.setColor(Color.black);
+		g.setFont(Game.newfont);
+		g.drawString(frases[NPC.fraseAtual].substring(0,NPC.letraAtual), 110, 250);
+	
+	}
 
 	public static void rotacionaRetangulo(Graphics g) {// Rotaciona um retangulo pelo mouse
 		Graphics2D g2 = (Graphics2D) g;
