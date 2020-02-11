@@ -95,6 +95,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static BufferedImage minimapa;
 	public static int[] minimapaPixels;
 
+	// Colisão por pixel
+	public BufferedImage sprite1;
+	public BufferedImage sprite2;
+	public int[] pixels1;
+	public int[] pixels2;
+	public int x1 = 90;
+	public int y1 = 90;
+	public int x2 = 100;
+	public int y2 = 100;
+
 	/************ Construtor ************/
 
 	public Game() {
@@ -136,7 +146,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		rand = new Random();
 		ui = new UI();
 		menu = new Menu();
-
 		try {
 			newfont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(16f);
 		} catch (FontFormatException e) {
@@ -145,6 +154,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			e.printStackTrace();
 		}
 
+		// Verificar colisão por pixel
+		// try {
+		// sprite1 = ImageIO.read(getClass().getResource("/sprite1.png"));
+		// sprite2 = ImageIO.read(getClass().getResource("/sprite2.png"));
+		// } catch (IOException e2) {
+		// e2.printStackTrace();
+		// }
+		// pixels1 = new int[sprite1.getWidth() * sprite1.getHeight()];
+		// sprite1.getRGB(0, 0, sprite1.getWidth(), sprite1.getHeight(), pixels1, 0,
+		// sprite1.getWidth());
+		// pixels2 = new int[sprite2.getWidth() * sprite2.getHeight()];
+		// sprite2.getRGB(0, 0, sprite2.getWidth(), sprite2.getHeight(), pixels2, 0,
+		// sprite2.getWidth());
 	}
 
 	/************ Inicializar ************/
@@ -239,7 +261,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				World.restartGame(newWorld);
 			}
 			player.updateCamera(); // Centraliza a camera
-
 		}
 
 		menu.tick(); // Atualiza o menu
@@ -247,6 +268,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for (int i = 0; i < walls.size(); i++) {// Atualiza as paredes
 			walls.get(i).tick();
 		}
+
+		// Verifica colisão por pixel
+		// if (this.isCollidingPixelPerfect(x1, y1, x2, y2, pixels1, pixels2, sprite1,
+		// sprite2)) {
+		// System.out.println("Estão colidindo por pixel");
+		// }
 
 	}
 
@@ -276,6 +303,28 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 
+	// Verifica colisão por pixel
+	public boolean isCollidingPixelPerfect(int x1, int y1, int x2, int y2, int[] pixels1, int[] pixels2,
+			BufferedImage sprite1, BufferedImage sprite2) {
+		for (int xx1 = 0; xx1 < sprite1.getWidth(); xx1++) {
+			for (int yy1 = 0; yy1 < sprite1.getHeight(); yy1++) {
+				for (int xx2 = 0; xx2 < sprite1.getWidth(); xx2++) {
+					for (int yy2 = 0; yy2 < sprite1.getHeight(); yy2++) {
+						int PixelAtual1 = pixels1[xx1 + yy1 * sprite1.getWidth()];
+						int PixelAtual2 = pixels2[xx2 + yy2 * sprite2.getWidth()];
+						if (PixelAtual1 == 0x00ffffff || PixelAtual2 == 0x00ffffff) {
+							continue;
+						}
+						if (xx1 + x1 == xx2 + x2 && yy1 + y1 == yy2 + y2) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	/************ Renderização ************/
 
 	public void render() {
@@ -299,7 +348,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			shoot.get(i).render(g);
 		}
 
-		applyLight(); // Aplica efeito de luz
+		// applyLight(); // Aplica efeito de luz
 
 		ui.render(g);// Renderiza a interface
 
@@ -328,6 +377,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		World.renderMiniMap(); // Renderiza o minimapa
 		g.drawImage(minimapa, 45, 100, World.WIDTH * 5, World.HEIGHT * 5, null); // Desenha o minimapa
+
+		// Desenha os sprites para colisão por pixel
+		g.drawImage(sprite1, x1, y1, null);
+		g.drawImage(sprite2, x2, y2, null);
 
 		g.dispose();// Limpa dados das imagens utilizadas antes
 		bs.show();// Exibe toda renderização
