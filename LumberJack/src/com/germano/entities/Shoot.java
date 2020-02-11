@@ -45,8 +45,6 @@ public class Shoot extends Entity { // Projeteis da arma
 		this.maskHeight = 16;
 	}
 
-	/************************************/
-
 	/************ Lógica ************/
 
 	public void tick() {// Muda a posição das balas e remove depois de um tempo

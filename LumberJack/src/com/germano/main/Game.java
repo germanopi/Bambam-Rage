@@ -1,6 +1,7 @@
 package com.germano.main;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -98,16 +99,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public Game() {
 
-		// s Sound.background.loop(); // Ativa a musica de fundo
+		// Sound.background.loop(); // Ativa a musica de fundo
 
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 
-		// Seleciona o tamanho da janela
+		// Seleciona o tamanho da janela para FullScreen
 		// setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
-		// FullScreen
+
+		// Seleciona o tamanho da janela Customizado
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
 
@@ -265,7 +267,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for (int xx = 0; xx < Game.WIDTH; xx++) {
 			for (int yy = 0; yy < Game.HEIGHT; yy++) {
 				if (lightMapPixels[xx + (yy * Game.WIDTH)] == 0xffffffff) {
-					pixels[xx + (yy * Game.WIDTH)] = 0;
+					int pixel = Pixel.getLightBlend(pixels[xx + (yy * WIDTH)], 0x808080, 0);
+					pixels[xx + (yy * Game.WIDTH)] = pixel;
 				} else {
 					continue;
 				}
@@ -296,7 +299,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			shoot.get(i).render(g);
 		}
 
-		// applyLight(); // Aplica efeito de luz
+		applyLight(); // Aplica efeito de luz
 
 		ui.render(g);// Renderiza a interface
 
@@ -304,11 +307,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		// drawRectangle(xx, yy); // Desenha retangulo manipulando pixels
 
-		// Renderiza na tela
+		// Renderiza na tela Customizada
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+
+		// Renderiza na tela FullScreen
+		// g = bs.getDrawGraphics();
 		// g.drawImage(image, 0, 0, Toolkit.getDefaultToolkit().getScreenSize().width,
-		// Toolkit.getDefaultToolkit().getScreenSize().height, null); // Fullscreen
+		// Toolkit.getDefaultToolkit().getScreenSize().height, null);
+
 		if (gameState.equals("GAME OVER")) { // Cria tela GameOver
 			UI.telaGameOver(g);
 		} else if (gameState.equals("MENU")) {// Cria tela Menu
