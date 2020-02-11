@@ -10,6 +10,7 @@ import com.germano.main.Sound;
 import com.germano.world.Camera;
 import com.germano.world.Tile;
 import com.germano.world.WallTile;
+import com.germano.world.World;
 
 public class Shoot extends Entity { // Projeteis da arma
 

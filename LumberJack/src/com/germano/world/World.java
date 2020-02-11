@@ -12,6 +12,7 @@ import com.germano.entities.Ammo;
 import com.germano.entities.Enemy;
 import com.germano.entities.Entity;
 import com.germano.entities.Heart;
+import com.germano.entities.Particle;
 import com.germano.entities.Player;
 import com.germano.entities.Shoot;
 import com.germano.entities.Weapon;
@@ -19,7 +20,7 @@ import com.germano.graficos.Spritesheet;
 import com.germano.main.Game;
 
 public class World {
-	
+
 	/************ Atributos ************/
 
 	public static Tile[] tiles;
@@ -120,6 +121,12 @@ public class World {
 	}
 
 	/************ Lógica ************/
+
+	public static void generateParticles(int amount, int x, int y) { // Cria particulas
+		for (int i = 0; i < amount; i++) {
+			Game.entities.add(new Particle(x, y, 1, 1, null));
+		}
+	}
 
 	public static boolean isFree(int xNext, int yNext, int zPlayer) {// Checa se o espaço está vazio
 		int x1 = xNext / TILE_SIZE;

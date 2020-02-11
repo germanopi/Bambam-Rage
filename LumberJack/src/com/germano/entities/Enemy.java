@@ -10,6 +10,7 @@ import com.germano.main.Sound;
 import com.germano.world.AStar;
 import com.germano.world.Camera;
 import com.germano.world.Vector2i;
+import com.germano.world.World;
 
 public class Enemy extends Entity {
 
@@ -143,6 +144,7 @@ public class Enemy extends Entity {
 				life--;
 				Sound.woodHurt.play();
 				Game.shoot.remove(i);
+				World.generateParticles(30, (int) x, (int) y); // Cria sangue das arvores
 				return;
 			}
 		}
