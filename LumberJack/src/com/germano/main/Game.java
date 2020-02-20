@@ -117,7 +117,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public Game() {
 
-		// Sound.background.loop(); // Ativa a musica de fundo
+		 Sound.background.loop(); // Ativa a musica de fundo
 
 		// Comunica ao canvas que recebe entrada por teclado e mouse
 		addKeyListener(this);
