@@ -1,14 +1,12 @@
 # Lumber Jack
 
-Jogo Desenvolvido em Java 
+Game created in Java at Eclipse.
+Based on Danki Code online course.
 
-Baseado no curso de Games da DankiCode
-
-# Comandos
-* Z / Mouse : Atirar
-* X : Pular
-* W,A,S,D / Direcionais : Andar
-* Esc : Pausar
-* Espaço : Salvar Jogo
-
+# Comands
+* Z / Mouse : Shoot
+* X : Jump
+* W,A,S,D / Arrows : Move
+* Esc : Pause
+* Space : Save
 
